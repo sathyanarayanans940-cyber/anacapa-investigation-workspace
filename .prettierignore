@@ -1,0 +1,13 @@
+node_modules
+dist
+release
+output
+desktop
+public
+docs
+runtime/model.mjs
+package-lock.json
+.anacapa-data
+
+playwright-report
+test-results

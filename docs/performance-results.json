@@ -1,0 +1,408 @@
+{
+  "measuredAt": "2026-10-11T17:58:54.178Z",
+  "sourceSha256": "a5ac2a3f0f972ea3419fade17ea9dd2d81e06da0234a27d28e0e59f7468567b9",
+  "runtime": "v25.8.1",
+  "host": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M3 Max",
+    "logicalCpus": 16,
+    "memoryGiB": 64
+  },
+  "method": "Built production app, Chromium headless 1280×900, Normal folder-backed cases, 2 links/card. Ten CPU samples; five real browser edit/save/reload cycles per shape. Save timing includes the 650ms autosave delay and Playwright overhead. No CPU throttling. Originals fixture: 1 MiB. Browser cold-load is a single observation.",
+  "limitation": "This host is not a typical low-end laptop. Results establish tested sizes on this machine only; no average-hardware latency, battery, or memory guarantee. Flat 3,000-card boards are a stress case, not a recommended investigation arrangement.",
+  "cases": [
+    {
+      "nodes": 100,
+      "links": 200,
+      "layout": "branched",
+      "visibleRootCards": 4,
+      "workspaceBytes": 73836,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 1.08,
+          "p95Ms": 2.59
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 0.1,
+          "p95Ms": 0.15
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 0.35,
+          "p95Ms": 0.41
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.06,
+          "p95Ms": 0.33
+        }
+      },
+      "browser": {
+        "coldLoadMs": 100.97,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 45.27,
+          "p95Ms": 64.56
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1025.64,
+          "p95Ms": 1096.91
+        }
+      },
+      "storage": {
+        "beforeBytes": 1194469,
+        "afterBytes": 1544404,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 347690,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 100,
+      "links": 200,
+      "layout": "flat",
+      "visibleRootCards": 100,
+      "workspaceBytes": 143160,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 1.18,
+          "p95Ms": 3.1
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 0.27,
+          "p95Ms": 0.32
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 0.66,
+          "p95Ms": 1.06
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.03,
+          "p95Ms": 0.04
+        }
+      },
+      "browser": {
+        "coldLoadMs": 122.22,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 81.77,
+          "p95Ms": 90.44
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1054.07,
+          "p95Ms": 1096.48
+        }
+      },
+      "storage": {
+        "beforeBytes": 1193367,
+        "afterBytes": 1540547,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 344935,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 500,
+      "links": 1000,
+      "layout": "branched",
+      "visibleRootCards": 17,
+      "workspaceBytes": 495248,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 5.12,
+          "p95Ms": 5.73
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 0.79,
+          "p95Ms": 1.05
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 2.18,
+          "p95Ms": 2.31
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.13,
+          "p95Ms": 0.15
+        }
+      },
+      "browser": {
+        "coldLoadMs": 111.66,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 56.32,
+          "p95Ms": 71.72
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1063.68,
+          "p95Ms": 1093.82
+        }
+      },
+      "storage": {
+        "beforeBytes": 1778895,
+        "afterBytes": 3539895,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 1758755,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 500,
+      "links": 1000,
+      "layout": "flat",
+      "visibleRootCards": 500,
+      "workspaceBytes": 844096,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 6.14,
+          "p95Ms": 7.37
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 1.49,
+          "p95Ms": 1.67
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 3.74,
+          "p95Ms": 3.88
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.13,
+          "p95Ms": 1.18
+        }
+      },
+      "browser": {
+        "coldLoadMs": 269.82,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 279.04,
+          "p95Ms": 297.3
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1157.86,
+          "p95Ms": 1313.53
+        }
+      },
+      "storage": {
+        "beforeBytes": 1772415,
+        "afterBytes": 3517215,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 1742555,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 1000,
+      "links": 2000,
+      "layout": "branched",
+      "visibleRootCards": 34,
+      "workspaceBytes": 1549648,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 11.77,
+          "p95Ms": 12.51
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 2.73,
+          "p95Ms": 3.01
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 6.96,
+          "p95Ms": 8.24
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.25,
+          "p95Ms": 0.3
+        }
+      },
+      "browser": {
+        "coldLoadMs": 114.52,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 39.45,
+          "p95Ms": 73.97
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1215.22,
+          "p95Ms": 1222.54
+        }
+      },
+      "storage": {
+        "beforeBytes": 2510823,
+        "afterBytes": 6039143,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 3526075,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 1000,
+      "links": 2000,
+      "layout": "flat",
+      "visibleRootCards": 1000,
+      "workspaceBytes": 2248579,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 18.02,
+          "p95Ms": 18.96
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 4.17,
+          "p95Ms": 4.64
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 10.26,
+          "p95Ms": 11.55
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.23,
+          "p95Ms": 1.1
+        }
+      },
+      "browser": {
+        "coldLoadMs": 483.76,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 386.07,
+          "p95Ms": 422.45
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1880.54,
+          "p95Ms": 1889.31
+        }
+      },
+      "storage": {
+        "beforeBytes": 2497581,
+        "afterBytes": 5992796,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 3492970,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 3000,
+      "links": 6000,
+      "layout": "branched",
+      "visibleRootCards": 100,
+      "workspaceBytes": 4389919,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 34.2,
+          "p95Ms": 45.14
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 8.06,
+          "p95Ms": 8.97
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 19.61,
+          "p95Ms": 21.89
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.66,
+          "p95Ms": 1.29
+        }
+      },
+      "browser": {
+        "coldLoadMs": 219.26,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 72.31,
+          "p95Ms": 107.84
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 1858.92,
+          "p95Ms": 1877.49
+        }
+      },
+      "storage": {
+        "beforeBytes": 5488399,
+        "afterBytes": 16195659,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 10705015,
+        "originalsBytes": 1048806
+      }
+    },
+    {
+      "nodes": 3000,
+      "links": 6000,
+      "layout": "flat",
+      "visibleRootCards": 3000,
+      "workspaceBytes": 6509186,
+      "cpu": {
+        "validate": {
+          "samples": 10,
+          "medianMs": 51.98,
+          "p95Ms": 57.46
+        },
+        "serialize": {
+          "samples": 10,
+          "medianMs": 12.69,
+          "p95Ms": 12.92
+        },
+        "clone": {
+          "samples": 10,
+          "medianMs": 30.25,
+          "p95Ms": 33.83
+        },
+        "allWireGeometry": {
+          "samples": 10,
+          "medianMs": 0.69,
+          "p95Ms": 4.2
+        }
+      },
+      "browser": {
+        "coldLoadMs": 1910.29,
+        "openEditor": {
+          "samples": 5,
+          "medianMs": 1629.1,
+          "p95Ms": 1907.57
+        },
+        "saveAndReload": {
+          "samples": 5,
+          "medianMs": 4153.01,
+          "p95Ms": 4327.3
+        }
+      },
+      "storage": {
+        "beforeBytes": 5444253,
+        "afterBytes": 16041148,
+        "revisionIncrease": 5,
+        "snapshotGrowthBytes": 10594650,
+        "originalsBytes": 1048806
+      }
+    }
+  ]
+}

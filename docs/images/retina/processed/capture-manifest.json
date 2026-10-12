@@ -1,0 +1,610 @@
+{
+  "appVersion": "0.3.3",
+  "capturedAt": "2026-10-11",
+  "evidence": "Fictional Harbor Tutorial only",
+  "images": [
+    {
+      "name": "workspace",
+      "source": "workspace-native.png",
+      "sourcePixels": [
+        2400,
+        1958
+      ],
+      "crop": [
+        0,
+        78,
+        2400,
+        1958
+      ],
+      "pixels": [
+        2400,
+        1880
+      ],
+      "resampled": false
+    },
+    {
+      "name": "cover",
+      "source": "workspace-native.png",
+      "sourcePixels": [
+        2400,
+        1958
+      ],
+      "crop": [
+        330,
+        480,
+        2050,
+        1330
+      ],
+      "pixels": [
+        1720,
+        850
+      ],
+      "resampled": false
+    },
+    {
+      "name": "node-closeup",
+      "source": "workspace-native.png",
+      "sourcePixels": [
+        2400,
+        1958
+      ],
+      "crop": [
+        940,
+        675,
+        1460,
+        1095
+      ],
+      "pixels": [
+        520,
+        420
+      ],
+      "resampled": false
+    },
+    {
+      "name": "board-tools",
+      "source": "workspace-native.png",
+      "sourcePixels": [
+        2400,
+        1958
+      ],
+      "crop": [
+        858,
+        1698,
+        1540,
+        1818
+      ],
+      "pixels": [
+        682,
+        120
+      ],
+      "resampled": false
+    },
+    {
+      "name": "case-setup",
+      "source": "high-resolution/case-setup.png",
+      "sourcePixels": [
+        1440,
+        945
+      ],
+      "crop": null,
+      "pixels": [
+        1440,
+        945
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "case-setup",
+        "nativeCapture": "case-setup.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1000,
+          925,
+          2440,
+          1870
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "security-options",
+      "source": "high-resolution/security-options.png",
+      "sourcePixels": [
+        1440,
+        355
+      ],
+      "crop": null,
+      "pixels": [
+        1440,
+        355
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "security-options",
+        "nativeCapture": "case-setup.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1000,
+          925,
+          2440,
+          1280
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "custom-type",
+      "source": "high-resolution/custom-type.png",
+      "sourcePixels": [
+        1440,
+        1053
+      ],
+      "crop": null,
+      "pixels": [
+        1440,
+        1053
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "custom-type",
+        "nativeCapture": "custom-type-clean.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1000,
+          642,
+          2440,
+          1695
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "details",
+      "source": "high-resolution/details.png",
+      "sourcePixels": [
+        1360,
+        445
+      ],
+      "crop": null,
+      "pixels": [
+        1360,
+        445
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "details",
+        "nativeCapture": "details-clean.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1035,
+          530,
+          2395,
+          975
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "attachments",
+      "source": "high-resolution/attachments.png",
+      "sourcePixels": [
+        1360,
+        545
+      ],
+      "crop": null,
+      "pixels": [
+        1360,
+        545
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "attachments",
+        "nativeCapture": "details-clean.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1035,
+          990,
+          2395,
+          1535
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "citations",
+      "source": "high-resolution/citations.png",
+      "sourcePixels": [
+        1355,
+        1030
+      ],
+      "crop": null,
+      "pixels": [
+        1355,
+        1030
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "citations",
+        "nativeCapture": "citations.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1040,
+          710,
+          2395,
+          1740
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "calendar",
+      "source": "high-resolution/calendar.png",
+      "sourcePixels": [
+        880,
+        1212
+      ],
+      "crop": null,
+      "pixels": [
+        880,
+        1212
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "calendar",
+        "nativeCapture": "calendar.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1535,
+          138,
+          2415,
+          1350
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "tilt-controls",
+      "source": "high-resolution/tilt-controls.png",
+      "sourcePixels": [
+        955,
+        420
+      ],
+      "crop": null,
+      "pixels": [
+        955,
+        420
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "tilt-controls",
+        "nativeCapture": "tilt-controls.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1250,
+          1380,
+          2205,
+          1800
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "new-relationship",
+      "source": "high-resolution/new-relationship.png",
+      "sourcePixels": [
+        1655,
+        1355
+      ],
+      "crop": null,
+      "pixels": [
+        1655,
+        1355
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "new-relationship",
+        "nativeCapture": "new-relationship-clean.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          920,
+          435,
+          2575,
+          1790
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "timeline-nested",
+      "source": "high-resolution/timeline-nested.png",
+      "sourcePixels": [
+        2000,
+        1400
+      ],
+      "crop": null,
+      "pixels": [
+        2000,
+        1400
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "timeline-nested",
+        "nativeCapture": "timeline-nested.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          70,
+          350,
+          2070,
+          1750
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "shared-details",
+      "source": "high-resolution/shared-details.png",
+      "sourcePixels": [
+        1610,
+        1215
+      ],
+      "crop": null,
+      "pixels": [
+        1610,
+        1215
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "shared-details",
+        "nativeCapture": "shared-details-clean.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          920,
+          555,
+          2530,
+          1770
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "focused-links",
+      "source": "high-resolution/focused-links.png",
+      "sourcePixels": [
+        1610,
+        1025
+      ],
+      "crop": null,
+      "pixels": [
+        1610,
+        1025
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "focused-links",
+        "nativeCapture": "focused-links.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          920,
+          565,
+          2530,
+          1590
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "filters",
+      "source": "high-resolution/filters.png",
+      "sourcePixels": [
+        1460,
+        940
+      ],
+      "crop": null,
+      "pixels": [
+        1460,
+        940
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "filters",
+        "nativeCapture": "filters.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1000,
+          540,
+          2460,
+          1480
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "settings",
+      "source": "high-resolution/settings.png",
+      "sourcePixels": [
+        1210,
+        382
+      ],
+      "crop": null,
+      "pixels": [
+        1210,
+        382
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "settings",
+        "nativeCapture": "settings.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          1110,
+          348,
+          2320,
+          730
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "share",
+      "source": "high-resolution/share.png",
+      "sourcePixels": [
+        1822,
+        1007
+      ],
+      "crop": null,
+      "pixels": [
+        1822,
+        1007
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "share",
+        "nativeCapture": "share.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          818,
+          503,
+          2640,
+          1510
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "case-integrity",
+      "source": "high-resolution/case-integrity.png",
+      "sourcePixels": [
+        1785,
+        1250
+      ],
+      "crop": null,
+      "pixels": [
+        1785,
+        1250
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "case-integrity",
+        "nativeCapture": "case-integrity-final.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          825,
+          640,
+          2610,
+          1890
+        ],
+        "browserZoom": "150%",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    },
+    {
+      "name": "case-history",
+      "source": "high-resolution/case-history.png",
+      "sourcePixels": [
+        1700,
+        1000
+      ],
+      "crop": null,
+      "pixels": [
+        1700,
+        1000
+      ],
+      "resampled": false,
+      "capture": {
+        "name": "case-history",
+        "nativeCapture": "case-history.png",
+        "nativePixels": [
+          3456,
+          1998
+        ],
+        "crop": [
+          875,
+          680,
+          2575,
+          1680
+        ],
+        "browserZoom": "enlarged",
+        "format": "lossless PNG",
+        "resampled": false
+      }
+    }
+  ]
+}

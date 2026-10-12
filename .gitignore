@@ -1,0 +1,31 @@
+/node_modules/
+/dist/
+/runtime/model.mjs
+/release/
+/.anacapa-data/
+/.runtime/
+/.wrangler/
+/.sites-runtime/
+/.next/
+/.vinext/
+/.agents/
+/.codex/
+/outputs/
+/output/
+/tmp/
+/work/
+.env*
+*.tsbuildinfo
+.DS_Store
+*.log
+
+# Folder-backed investigations must stay out of source control.
+Anacapa-*/
+
+# Repeatable browser checks write only disposable artifacts.
+/test-results/
+/playwright-report/
+
+# Python guide-build caches are generated state.
+__pycache__/
+*.pyc

@@ -1,0 +1,63 @@
+{
+  "format": "anacapa-release-validation",
+  "version": 1,
+  "appVersion": "0.4.1",
+  "generatedAt": "2026-10-12T00:44:47.858Z",
+  "sourceSha256": "dfa60ce0bee394255397322997f557852c63e32c6782345981d43c574400e18d",
+  "runtime": "v22.13.0",
+  "platform": "darwin",
+  "sourceFiles": 106,
+  "typecheck": "passed",
+  "automated": {
+    "tests": 93,
+    "passed": 93,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      "appearance.test.mjs",
+      "assurance-api.test.mjs",
+      "board-placement.test.mjs",
+      "case-security.test.mjs",
+      "checkpoints.test.mjs",
+      "connection-colours-api.test.mjs",
+      "edge-cases.test.mjs",
+      "investigation-package.test.mjs",
+      "local-date.test.mjs",
+      "local-server.test.mjs",
+      "model.test.mjs",
+      "provenance.test.mjs",
+      "pwa-smoke.test.mjs",
+      "relationships.test.mjs",
+      "save-queue.test.mjs",
+      "sharing-copy.test.mjs",
+      "storage.test.mjs",
+      "thread-layout.test.mjs",
+      "timeline-layout.test.mjs",
+      "viewer-colours.test.mjs",
+      "workflow-api.test.mjs"
+    ]
+  },
+  "browser": {
+    "engine": "Chromium",
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Desktop editing and reload, mobile search and timeline, drag/undo/pan, case storage, offline HTML at 320/390/650/1280px."
+  },
+  "interactiveVisualCheck": "Automated Chromium workflows passed. Complete manual accessibility and device review remains pending.",
+  "independentSecurityReview": "Not performed or established by this report.",
+  "agencyApproval": "Not established by this report.",
+  "scope": [
+    "Manifest identity, appearance overrides, all 104 PNG icon assets, and case storage growth.",
+    "Case validation, nested timelines, links, source records, placement, and save conflict recovery.",
+    "Portable packages, protected sharing, redaction, and local API session restrictions.",
+    "Advanced encryption, account roles, original hashes, history, custody, and folder backups.",
+    "Simple controls data preservation, signed checkpoint chains, rollback detection, missing storage, and interrupted save recovery."
+  ],
+  "limits": [
+    "These developer tests are not a penetration test, forensic validation, security certification, or approval for operational evidence use.",
+    "Local roles and signatures cannot protect against compromise of the operating system, unlocked case, or private signing key.",
+    "A separate checkpoint can detect a changed case folder only while its signing identity and trusted external records remain trustworthy.",
+    "Complete manual accessibility, installed PWA/browser-OS behavior, and low-end hardware checks remain necessary. Windows/Linux CI is configured but a passing hosted CI run must be checked separately."
+  ]
+}
