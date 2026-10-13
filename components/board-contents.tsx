@@ -12,6 +12,7 @@ export const BoardContents = memo(function BoardContents({
   crossCounts,
   childCounts,
   showThreads,
+  editable,
   tool,
   connectFrom,
   tiltId,
@@ -23,6 +24,7 @@ export const BoardContents = memo(function BoardContents({
   crossCounts: ReadonlyMap<string, number>;
   childCounts: ReadonlyMap<string | null, number>;
   showThreads: boolean;
+  editable: boolean;
   tool: string;
   connectFrom: string | null;
   tiltId: string | null;
@@ -66,6 +68,12 @@ export const BoardContents = memo(function BoardContents({
           onEdit={() => actions.onNodeEdit(n)}
           onExplore={() => actions.onNodeExplore(n)}
           onAddChild={() => actions.onNodeAddChild(n.id)}
+          resizable={editable && tool === 'select'}
+          onResizeDown={(e) => actions.pointerDown(e, n.id, 'resize')}
+          onResizeMove={actions.pointerMove}
+          onResizeUp={actions.pointerUp}
+          onResizeCancel={actions.pointerCancel}
+          onResize={(size) => actions.resizeNode(n.id, size)}
         />
       ))}
       {showThreads &&

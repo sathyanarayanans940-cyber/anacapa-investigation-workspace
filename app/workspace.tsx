@@ -3,6 +3,7 @@ import { useBoardActions } from '@/hooks/use-board-actions';
 import { EvidenceSearch } from '@/components/evidence-search';
 import { useCaseNavigation } from '@/hooks/use-case-navigation';
 import { useBoardGestures, type BoardDrag } from '@/hooks/use-board-gestures';
+import { sizeCard, type CardSize } from '@/lib/card-size';
 import { visualColor } from '@/components/evidence-card';
 import { BoardTool } from '@/components/board-tool';
 import { icons } from '@/lib/evidence-display';
@@ -94,7 +95,7 @@ import {
 import { workspaceSchema } from '@/lib/validation';
 import { wallDateLabel, timeLabel } from '@/lib/local-date';
 import { useWorkspacePersistence } from '@/hooks/use-workspace-persistence';
-import { cardBounds, findBoardSpace } from '@/lib/board-placement';
+import { cardBounds, cardSize, findBoardSpace } from '@/lib/board-placement';
 import {
   packInvestigation,
   parseInvestigationPackage,
@@ -449,6 +450,31 @@ export default function Page() {
       ),
     }));
   };
+  const resizeNode = (id: string, requested?: CardSize) => {
+    if (!loaded || !editable || tool !== 'select') return;
+    const node = dataRef.current.cases
+      .find((file) => file.id === dataRef.current.activeCase)
+      ?.nodes.find((n) => n.id === id);
+    if (!node || (!requested && !node.boardSize)) return;
+    const card = Array.from(
+      boardRef.current?.querySelectorAll<HTMLElement>('.evidence-card') || [],
+    ).find((element) => element.dataset.nodeId === id);
+    let resized: Evidence;
+    if (requested) {
+      const start = {
+        ...node,
+        width: card?.offsetWidth || cardSize(node).width,
+        height: card?.offsetHeight || cardSize(node).height,
+        rotation: node.rotation ?? (node.kind === 'Note' ? -2 : 0),
+      };
+      resized = { ...node, ...sizeCard(start, requested) };
+      if (JSON.stringify(resized) === JSON.stringify(node)) return;
+    } else {
+      const { boardSize, ...automatic } = node;
+      resized = automatic;
+    }
+    updateCase((file) => ({ ...file, nodes: file.nodes.map((n) => (n.id === id ? resized : n)) }));
+  };
   const positionNewCard = (node: Evidence) => {
     const el = boardRef.current;
     const measured = new Map(
@@ -621,8 +647,8 @@ export default function Page() {
       const cards = Array.from(el.querySelectorAll<HTMLElement>('.evidence-card'));
       const bounds = ns.map((n) => {
         const card = cards.find((e) => e.dataset.nodeId === n.id),
-          width = card?.offsetWidth || 248,
-          height = card?.offsetHeight || 215,
+          width = card?.offsetWidth || cardSize(n).width,
+          height = card?.offsetHeight || cardSize(n).height,
           angle = ((n.rotation ?? (n.kind === 'Note' ? -2 : 0)) * Math.PI) / 180,
           rotatedWidth = Math.abs(width * Math.cos(angle)) + Math.abs(height * Math.sin(angle)),
           rotatedHeight = Math.abs(height * Math.cos(angle)) + Math.abs(width * Math.sin(angle));
@@ -659,7 +685,9 @@ export default function Page() {
     [scope, query, filter, onlyPins],
   );
   useEffect(() => {
-    const timer = setTimeout(() => fit(0.35), 100);
+    const timer = setTimeout(() => {
+      if (!drag.current) fit(0.35);
+    }, 100);
     return () => clearTimeout(timer);
   }, [scope, mode, loaded, data.activeCase, fit]);
   useEffect(() => {
@@ -678,6 +706,7 @@ export default function Page() {
       if ((e.target as HTMLElement)?.closest('input,textarea,[role=dialog],[contenteditable]'))
         return;
       if (e.key === 'Escape') {
+        if (drag.current) pointerCancel();
         setTool('select');
         setConnectFrom(null);
         setQuery('');
@@ -742,6 +771,7 @@ export default function Page() {
     pointerUp,
     pointerCancel,
     moveLabel,
+    resizeNode,
   });
   function exportData() {
     const cases = dataRef.current.cases
@@ -1124,6 +1154,7 @@ export default function Page() {
                       crossCounts={crossCounts}
                       childCounts={childCounts}
                       showThreads={showThreads}
+                      editable={editable}
                       tool={tool}
                       connectFrom={connectFrom}
                       tiltId={tiltId}
@@ -1229,7 +1260,7 @@ export default function Page() {
                           id: 'select',
                           icon: MousePointer2,
                           label: 'Select (V)',
-                          help: 'Select · drag a card to move it; click to explore inside. Use the pencil to edit.',
+                          help: 'Select · drag cards to move, drag their lower-right corner to resize. Click to explore; pencil to edit.',
                         },
                         {
                           id: 'pan',
@@ -2049,6 +2080,13 @@ export default function Page() {
                 name the relationship. Select moves cards and thread labels. Pan moves the whole
                 board. Relationships lets you choose cards across any timelines, and Shared details
                 suggests matches to review. Hover the toolbar icons to see their names.
+              </p>
+              <p>
+                <strong>Resize a card.</strong> In Select, drag its lower-right corner. Smaller
+                cards show the title; larger ones show more of the preview. Evidence stays intact.
+                Double-click the grip to return to automatic size. You can also focus the grip and
+                use arrow keys, Shift for ten pixels, or Home to reset. Sizes save per card and are
+                included in editable files and new HTML snapshots.
               </p>
               <p>
                 <strong>3. Follow the timeline.</strong> Click a card to open its sub-events and

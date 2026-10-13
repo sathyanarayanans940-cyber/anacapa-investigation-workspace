@@ -17,6 +17,7 @@ test('layout edits do not require an evidence reason, while citations, links and
     b = structuredClone(a);
   b.nodes[0].x += 20;
   b.nodes[0].rotation = 3;
+  b.nodes[0].boardSize = { width: 180, height: 120 };
   b.threads[0].style = 'spring';
   assert.equal(evidenceChanged(a, b), false);
   b.threads[0].dashed = true;

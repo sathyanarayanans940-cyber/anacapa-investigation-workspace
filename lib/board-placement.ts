@@ -4,6 +4,7 @@ export type CardBounds = { x: number; y: number; width: number; height: number }
 
 // Use measured cards when available; unopened branches need a conservative estimate.
 export function cardSize(node: Evidence) {
+  if (node.boardSize) return node.boardSize;
   const width = node.pinned ? 270 : node.kind === 'Note' ? 245 : 248;
   const lines = (text: string, columns: number) =>
     text.split('\n').reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length / columns)), 0);

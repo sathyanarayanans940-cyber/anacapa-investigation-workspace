@@ -59,6 +59,8 @@ Optional sections in the editor contain timeline placement, custom detail fields
 
 The bottom toolbar offers Select, Pan, Connect, and Tilt. Hover or focus for labels. Select moves one card; Pan moves the entire board. Tilt intentionally rotates a selected card in 1° steps, up to 15° each way. Undo/redo keeps the latest 40 actions in a session. Settings provides light, dark, and system appearance, palettes, and app icons.
 
+Scrollbars throughout the editor and newly exported HTML viewers use the active palette’s accent colour with a transparent track. Existing HTML snapshots keep the styles embedded when they were exported; download a new viewer to get appearance updates.
+
 On narrow screens, the header’s magnifying glass opens evidence search. The labelled **Timeline** tab opens the chart; choose **List** for a compact chronological view. Search includes nested cards, and Clear search restores the branch. Ctrl/⌘ K opens the appropriate search control at any width.
 
 For larger cases, keep the main board focused on the key events and group nearby people, places, documents, and devices around them. Put detailed sequences inside their parent cards, then use Relationships to link shared evidence across branches. The board is freely arranged; synthetic benchmark grids do not set its layout. Showing every item and link at once will become crowded, so use nested boards, search, and filters as a case grows.
@@ -70,6 +72,8 @@ Open **Help** in the lower-right corner to download the illustrated **28-page us
 ## Controls and protection
 
 **Simple** is the easiest starting point: cards, dates, attachments, nested timelines, basic connections, and undo/redo. Optional card fields appear under **More fields & sources**. Tilt, filters, pins, Add note, and the Relationships browser are available by choosing **Settings → Case controls → Full**. Existing data and links are preserved when changing controls.
+
+In **Select**, drag a card’s lower-right corner to change its width and height. Compact cards show the title and pencil; wider/taller cards reveal more preview text. The full evidence remains available inside the card and editor. Double-click the grip to restore automatic size, or use **Card appearance & labels → Reset card size** in the editor. A focused grip supports arrow keys, Shift for ten pixels, and Home to reset. Escape cancels a drag. Sizes are independent, support Undo/Redo, and save with the case, `.anacapa` files, and newly exported HTML. Board sizing does not change timeline card styles.
 
 **Normal** exposes the full controls without passwords or required change reasons. **Advanced** adds encryption, local roles, locking, and change reasons. An Advanced case can also use Simple controls from Settings without weakening its protection. Simple at creation uses Normal protection; the control preference never changes security mode.
 

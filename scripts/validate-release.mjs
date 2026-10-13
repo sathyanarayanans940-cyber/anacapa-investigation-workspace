@@ -80,20 +80,22 @@ const report = {
     files: tests.map((n) => n.replace('tests/', '')),
   },
   browser: {
-    engine: 'Chromium',
+    engine: process.env.ANACAPA_BROWSER_CHANNEL === 'chrome' ? 'Google Chrome' : 'Chromium',
+    channel: process.env.ANACAPA_BROWSER_CHANNEL || 'bundled-chromium',
     passed: browser.stats.expected,
     failed: browser.stats.unexpected,
     skipped: browser.stats.skipped,
     scope:
-      'Desktop editing and reload, mobile search and timeline, drag/undo/pan, case storage, offline HTML at 320/390/650/1280px.',
+      'Desktop editing and reload, mobile search and timeline, drag/resize/undo/pan, compact previews, nested resizing in Simple controls, case storage, offline HTML at 320/390/650/1280px, and theme-coloured scrollbars across editor/viewer regions.',
   },
   interactiveVisualCheck:
-    'Automated Chromium workflows passed. Complete manual accessibility and device review remains pending.',
+    'Automated browser workflows passed. Complete manual accessibility and device review remains pending.',
   independentSecurityReview: 'Not performed or established by this report.',
   agencyApproval: 'Not established by this report.',
   scope: [
     'Manifest identity, appearance overrides, all 104 PNG icon assets, and case storage growth.',
     'Case validation, nested timelines, links, source records, placement, and save conflict recovery.',
+    'Per-card sizes, zoom/rotation resize geometry, cancellation, compact previews, and portable layout preservation.',
     'Portable packages, protected sharing, redaction, and local API session restrictions.',
     'Advanced encryption, account roles, original hashes, history, custody, and folder backups.',
     'Simple controls data preservation, signed checkpoint chains, rollback detection, missing storage, and interrupted save recovery.',
@@ -113,7 +115,7 @@ const escape = (value) =>
     .replaceAll('"', '&quot;');
 const items = (values) =>
   '<ul>' + values.map((v) => '<li>' + escape(v) + '</li>').join('') + '</ul>';
-const html = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Anacapa · Release validation</title><style>body{margin:0;background:#f6f2eb;color:#383329;font:17px/1.65 Georgia,serif}main{max-width:820px;margin:48px auto;padding:0 28px 48px}h1{font-size:42px;line-height:1.15;margin-bottom:16px}h2{font-size:25px;margin-top:34px}small{color:#665e50}code{font-size:13px;overflow-wrap:anywhere}section{padding:24px;border:1px solid #ddd2c1;border-radius:16px;margin:24px 0;background:#fffcf6}a{color:#785d38}li{margin:8px 0}.result{font-size:25px}dd{margin:0 0 14px}dt{font-weight:bold}@media(prefers-color-scheme:dark){body{background:#28251f;color:#e8dfd1}small{color:#c6b8a3}section{background:#332e26;border-color:#5b4e3b}a{color:#d5b784}}</style><main><small>anacapa / DEVELOPER VALIDATION</small><h1>Release ${escape(version)} test results</h1><p>This records automated checks of the current source. It does not establish independent security review or approval for official evidence handling.</p><section><div class="result">${report.automated.passed} / ${report.automated.tests} tests passed</div><p>TypeScript and formatting checks passed. ${report.browser.passed} Chromium browser workflows passed. ${report.automated.skipped} tests skipped.</p><dl><dt>Generated</dt><dd>${escape(report.generatedAt)}</dd><dt>Runtime</dt><dd>${escape(report.runtime)} · ${escape(report.platform)}</dd><dt>Source SHA-256</dt><dd><code>${report.sourceSha256}</code></dd></dl><a href="report.json">Download the JSON report</a></section><h2>What was checked</h2>${items(report.scope)}<h2>Still needs review</h2><p>${escape(report.interactiveVisualCheck)}</p>${items(report.limits)}<h2>Test files</h2>${items(report.automated.files)}<p><a href="/">Back to Anacapa</a></p></main></html>`;
+const html = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Anacapa · Release validation</title><style>body{margin:0;background:#f6f2eb;color:#383329;font:17px/1.65 Georgia,serif}main{max-width:820px;margin:48px auto;padding:0 28px 48px}h1{font-size:42px;line-height:1.15;margin-bottom:16px}h2{font-size:25px;margin-top:34px}small{color:#665e50}code{font-size:13px;overflow-wrap:anywhere}section{padding:24px;border:1px solid #ddd2c1;border-radius:16px;margin:24px 0;background:#fffcf6}a{color:#785d38}li{margin:8px 0}.result{font-size:25px}dd{margin:0 0 14px}dt{font-weight:bold}@media(prefers-color-scheme:dark){body{background:#28251f;color:#e8dfd1}small{color:#c6b8a3}section{background:#332e26;border-color:#5b4e3b}a{color:#d5b784}}</style><main><small>anacapa / DEVELOPER VALIDATION</small><h1>Release ${escape(version)} test results</h1><p>This records automated checks of the current source. It does not establish independent security review or approval for official evidence handling.</p><section><div class="result">${report.automated.passed} / ${report.automated.tests} tests passed</div><p>TypeScript and formatting checks passed. ${report.browser.passed} ${escape(report.browser.engine)} browser workflows passed. ${report.automated.skipped} tests skipped.</p><dl><dt>Generated</dt><dd>${escape(report.generatedAt)}</dd><dt>Runtime</dt><dd>${escape(report.runtime)} · ${escape(report.platform)}</dd><dt>Source SHA-256</dt><dd><code>${report.sourceSha256}</code></dd></dl><a href="report.json">Download the JSON report</a></section><h2>What was checked</h2>${items(report.scope)}<h2>Still needs review</h2><p>${escape(report.interactiveVisualCheck)}</p>${items(report.limits)}<h2>Test files</h2>${items(report.automated.files)}<p><a href="/">Back to Anacapa</a></p></main></html>`;
 await mkdir('public/validation', { recursive: true });
 await writeFile('public/validation/report.json', JSON.stringify(report, null, 2));
 await writeFile('public/validation/report.html', html);

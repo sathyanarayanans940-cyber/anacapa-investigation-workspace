@@ -14,6 +14,7 @@ Anacapa is a local web app. React renders the workspace; a loopback-only Node se
 | `components/evidence-search.tsx`                                               | Desktop input and mobile search dialog share one query.                            |
 | `components/timeline-*.tsx`, `relationships.tsx`                               | Nested chronology and links between branches.                                      |
 | `lib/validation.ts`, `case-data.ts`, `provenance.ts`                           | Shared model, bounded schema, and material-versus-layout change rules.             |
+| `lib/card-size.ts` | Per-card resize bounds, rotated/zoomed geometry, compact previews, and anchors. |
 | `lib/connection-path.ts`, `thread-layout.ts`                                   | Per-wire geometry, endpoint lookup, and label placement.                           |
 | `lib/investigation-package.ts`                                                 | Portable case format, original bytes, import validation, and filename rules.       |
 | `lib/investigation-viewer*.ts`                                                 | Standalone HTML packaging, readable viewer script, and viewer styles.              |
@@ -24,7 +25,9 @@ Anacapa is a local web app. React renders the workspace; a loopback-only Node se
 
 ## Editing and saving
 
-The editor holds a draft until Save. Applying an edit validates the workspace and records an undo boundary. Advanced cases require a reason for material evidence changes. Position, colour, wire shape, and label offsets are layout changes. Dashed uncertainty remains a material relationship property.
+The editor holds a draft until Save. Applying an edit validates the workspace and records an undo boundary. Advanced cases require a reason for material evidence changes. Position, board size, colour, wire shape, and label offsets are layout changes. Dashed uncertainty remains a material relationship property.
+
+`lib/card-size.ts` owns bounded resize geometry, preview density, and wire anchors. Optional `Evidence.boardSize` preserves old automatic layouts, while explicit sizes are validated at 160–720 px wide and 100–640 px tall. Pointer movement is converted through board zoom and card rotation; adjusting position keeps the opposite corner fixed. A completed drag creates one undo entry, and cancellation restores its starting state. Compact previews hide content rather than modifying evidence. Editable packages and shared HTML retain board dimensions; timeline layouts remain separate.
 
 Autosave sends a workspace revision. A stale revision produces a conflict and keeps the local draft for recovery. One queue drains later edits made while a save is in flight. Case history is permanent; session undo is separate and retains the latest 40 actions. Full revision snapshots and original files occupy disk space over time.
 

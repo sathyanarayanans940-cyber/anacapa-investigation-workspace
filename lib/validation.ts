@@ -50,6 +50,12 @@ export const evidenceSchema = z.object({
   x: z.number().finite().min(-100000).max(100000),
   y: z.number().finite().min(-100000).max(100000),
   rotation: z.number().finite().min(-15).max(15).optional(),
+  boardSize: z
+    .object({
+      width: z.number().finite().min(160).max(720),
+      height: z.number().finite().min(100).max(640),
+    })
+    .optional(),
   timelineSide: z.enum(['above', 'below']).optional(),
   timelineStyle: z.enum(['card', 'compact', 'note']).optional(),
   color: z.string().regex(/^#[0-9a-f]{6}$/i),

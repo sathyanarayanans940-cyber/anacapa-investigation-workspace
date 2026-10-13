@@ -510,6 +510,24 @@ export function EvidenceEditor({
                     <ChevronRight size={15} />
                   </summary>
                   <div className="section-body">
+                    <div className="card-size-setting">
+                      <span>
+                        Board size
+                        <small>
+                          {n.boardSize
+                            ? `${Math.round(n.boardSize.width)} × ${Math.round(n.boardSize.height)} px`
+                            : 'Automatic · fits the preview'}
+                        </small>
+                      </span>
+                      {n.boardSize && (
+                        <button type="button" onClick={() => patch({ boardSize: undefined })}>
+                          Reset card size
+                        </button>
+                      )}
+                    </div>
+                    <p className="field-help">
+                      Drag the card’s lower-right corner on the board to resize it.
+                    </p>
                     <label>
                       Confidence
                       <Picker

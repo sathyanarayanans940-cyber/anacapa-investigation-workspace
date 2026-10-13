@@ -1,9 +1,14 @@
 import { wirePath } from './connection-path.ts';
+import { cardAnchor, compactCard, cardPreviewLines, cardPreviewText } from './card-size.ts';
 
 export const script = String.raw`
 (async function () {
   'use strict';
   const wirePath = ${wirePath.toString()};
+  const cardAnchor = ${cardAnchor.toString()};
+  const compactCard = ${compactCard.toString()};
+  const cardPreviewLines = ${cardPreviewLines.toString()};
+  const cardPreviewText = ${cardPreviewText.toString()};
   document.documentElement.classList.toggle(
     'dark',
     window.matchMedia('(prefers-color-scheme: dark)').matches,
@@ -180,8 +185,18 @@ export const script = String.raw`
     render();
     fit();
   }
-  function card(n) {
+  function card(n, onBoard = false) {
     const b = el('button', 'card');
+    const pic = n.images.find((a) => imageTypes.includes(a.type));
+    const compact = onBoard && n.boardSize && compactCard(n.boardSize);
+    const lines = onBoard && n.boardSize ? cardPreviewLines(n.boardSize, headline(n), n.fields.length > 0, !!pic) : 0;
+    if (onBoard && n.boardSize) {
+      b.classList.add('sized-card');
+      b.classList.toggle('compact-card', compactCard(n.boardSize));
+      b.style.width = n.boardSize.width + 'px';
+      b.style.height = n.boardSize.height + 'px';
+      b.style.setProperty('--preview-lines', lines);
+    }
     b.type = 'button';
     b.dataset.nodeId = n.id;
     b.setAttribute('aria-label', 'View ' + headline(n));
@@ -190,11 +205,10 @@ export const script = String.raw`
       el('i', 'pin'),
       el('span', 'kind', n.customKind || n.kind),
       el('h2', '', headline(n)),
-      el('p', '', n.summary.slice(0, 160)),
+      el('p', '', compact ? '' : onBoard && n.boardSize ? cardPreviewText(n.summary, n.boardSize.width, lines) : n.summary.slice(0, 160)),
     );
-    if (n.fields[0]) b.append(el('span', 'detail', n.fields[0].value));
-    const pic = n.images.find((a) => imageTypes.includes(a.type));
-    if (pic) {
+    if (n.fields[0] && (!onBoard || !n.boardSize || n.boardSize.height >= 240)) b.append(el('span', 'detail', n.fields[0].value));
+    if (!compact && pic && (!onBoard || !n.boardSize || n.boardSize.height >= 320)) {
       const img = el('img', 'preview');
       img.src = urls.get(pic.url);
       img.alt = pic.name;
@@ -247,10 +261,8 @@ export const script = String.raw`
     threads.forEach((t) => {
       const a = find(t.source),
         b = find(t.target),
-        sx = a.x + 118,
-        sy = a.y + 82,
-        tx = b.x + 118,
-        ty = b.y + 82,
+        {x: sx, y: sy} = cardAnchor(a),
+        {x: tx, y: ty} = cardAnchor(b),
         path = document.createElementNS(svg.namespaceURI, 'path');
       path.setAttribute('d', wirePath(sx, sy, tx, ty, t.style));
       path.setAttribute('stroke', t.color);
@@ -262,7 +274,7 @@ export const script = String.raw`
       svg.append(path);
     });
     visible.forEach((n) => {
-      const b = card(n);
+      const b = card(n, true);
       b.style.left = n.x + 'px';
       b.style.top = n.y + 'px';
       b.style.transform = 'rotate(' + (n.rotation ?? (n.kind === 'Note' ? -2 : 0)) + 'deg)';
@@ -272,9 +284,10 @@ export const script = String.raw`
       const a = find(t.source),
         b = find(t.target),
         label = el('span', 'label', t.label);
+      const source = cardAnchor(a), target = cardAnchor(b);
       label.style.color = t.color;
-      label.style.left = (a.x + b.x) / 2 + 118 + (t.labelOffset?.x || 0) + 'px';
-      label.style.top = (a.y + b.y) / 2 + 82 + (t.labelOffset?.y || 0) + 'px';
+      label.style.left = (source.x + target.x) / 2 + (t.labelOffset?.x || 0) + 'px';
+      label.style.top = (source.y + target.y) / 2 + (t.labelOffset?.y || 0) + 'px';
       scene.append(label);
     });
     transform();

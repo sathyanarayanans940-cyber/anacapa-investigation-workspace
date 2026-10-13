@@ -23,6 +23,14 @@ npm run test:browser
 npm run benchmark
 ```
 
+To test the installed Google Chrome with a disposable browser profile, set `ANACAPA_BROWSER_CHANNEL=chrome` before `npm run test:browser` or `npm run validate`. On macOS/Linux:
+
+```sh
+ANACAPA_BROWSER_CHANNEL=chrome npm run validate
+```
+
+Chrome must already be installed. CI continues to use its downloaded Chromium. Neither option changes the user's Chrome profile or PWA installation. Native scrollbar rendering is enabled in the browser tests rather than hidden by the headless launch flag.
+
 Node tests rebuild the runtime model first. Browser tests require a production build. Each browser workflow starts a disposable server on an OS-assigned loopback port, with fictional data and temporary case folders. They do not reuse port 5173 or the user's workspace. Failure screenshots, traces, and the browser report are ignored by Git.
 
 ## PWA manifest and icon smoke check
@@ -44,7 +52,9 @@ The suite verifies:
 - Mobile search, clear, Ctrl K, named timeline controls, Chart/List, and returning to the board.
 - Nested navigation, pencil editing, autosave, reload, and per-wire style/colour persistence without changing other wires.
 - Desktop search, dragging a card, Undo, and switching Pan/Select with current handlers.
+- Per-card resizing at board zoom, fixed opposite corners on rotated notes, cancellation, keyboard adjustments, size limits, automatic reset, Undo/Redo, and save/reload. Compact cards retain full notes in the editor, nested cards resize with Simple controls, and HTML snapshots keep individual board sizes without applying them to timeline cards. Model/API checks cover bounded dimensions, layout-only edits in Advanced mode, placement, wire anchors, and editable package round-trips.
 - Folder storage totals in the UI without appending a case revision.
+- Theme-coloured scrollbars across all four editor palettes, including settings, timeline areas and text fields; light/dark standalone viewer regions; actual horizontal/vertical wheel scrolling; and system colours when forced-colour accessibility mode is active.
 - Standalone HTML viewing with browser networking disabled at 320, 390, 650, and 1280 pixels: all header controls remain on-screen; relationships, branches, timeline, and report work.
 
 Playwright configuration and locators follow its [official test documentation](https://playwright.dev/docs/test-configuration). Formatting is configured through [Prettier's documented configuration](https://prettier.io/docs/configuration).

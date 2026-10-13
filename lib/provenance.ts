@@ -12,7 +12,18 @@ export function materialCase(file: CaseFile) {
   return {
     ...rest,
     nodes: file.nodes.map(
-      ({ x, y, rotation, timelineSide, timelineStyle, color, pinned, titleField, ...n }) => n,
+      ({
+        x,
+        y,
+        rotation,
+        boardSize,
+        timelineSide,
+        timelineStyle,
+        color,
+        pinned,
+        titleField,
+        ...n
+      }) => n,
     ),
     threads: file.threads.map(({ labelOffset, color, style, ...t }) => t),
   };

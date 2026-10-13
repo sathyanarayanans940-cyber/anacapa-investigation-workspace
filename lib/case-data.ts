@@ -50,6 +50,7 @@ export type Evidence = {
   x: number;
   y: number;
   rotation?: number;
+  boardSize?: { width: number; height: number };
   timelineSide?: TimelineSide;
   timelineStyle?: TimelineStyle;
   color: string;

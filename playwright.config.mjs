@@ -10,6 +10,8 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     browserName: 'chromium',
+    channel: process.env.ANACAPA_BROWSER_CHANNEL || undefined,
+    launchOptions: { ignoreDefaultArgs: ['--hide-scrollbars'] },
     viewport: { width: 1280, height: 900 },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',

@@ -61,9 +61,13 @@ for (const mode of ['normal', 'advanced'])
       find().threads[0].color = '#274b93';
       find().threads[1].color = '#bf7370';
       find().threads.forEach((t, i) => (t.style = wireStyles[i]));
+      const otherCards = structuredClone(find().nodes.slice(1));
+      find().nodes[0].boardSize = { width: 180, height: 120 };
       // Changing only appearance does not require an evidence-change reason in Advanced mode.
       assert.equal((await request('/api/workspace', 'PUT', state)).status, 200);
       state = await (await request('/api/workspace')).json();
+      assert.deepEqual(find().nodes[0].boardSize, { width: 180, height: 120 });
+      assert.deepEqual(find().nodes.slice(1), otherCards);
       assert.equal(find().threads[0].color, '#274b93');
       assert.equal(find().threads[1].color, '#bf7370');
       assert.deepEqual(
@@ -81,6 +85,10 @@ for (const mode of ['normal', 'advanced'])
         find().threads.map((t) => t.style),
         [...wireStyles],
       );
+      find().nodes[0].boardSize.width = 159;
+      assert.equal((await request('/api/workspace', 'PUT', state)).status, 400);
+      state = await (await request('/api/workspace')).json();
+      assert.deepEqual(find().nodes[0].boardSize, { width: 180, height: 120 });
     } finally {
       if (server) await new Promise((resolve) => server.close(resolve));
       await rm(directory, { recursive: true, force: true });

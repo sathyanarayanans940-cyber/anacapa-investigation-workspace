@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @custom-variant dark (&:is(.dark *));
+:root {
+  --scrollbar-thumb: var(--primary);
+  --scrollbar-thumb-hover: var(--foreground);
+}
 :root,
 [data-theme='paper'] {
   --background: #f4eee6;
@@ -110,6 +114,37 @@
 }
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+/* Older WebKit browsers use the same colours and a rounded, inset thumb. */
+@supports not (scrollbar-color: auto) {
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  *::-webkit-scrollbar-button {
+    display: none;
+  }
+}
+@media (forced-colors: active) {
+  * {
+    scrollbar-color: auto !important;
+    scrollbar-width: auto !important;
+  }
 }
 body {
   margin: 0;
@@ -315,7 +350,7 @@ button:hover {
   min-width: 0;
   overflow-x: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
   position: relative;
 }
 .ribbon-events {
@@ -2249,7 +2284,7 @@ button:hover {
   gap: 14px !important;
   padding: 22px !important;
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 .appearance-settings {
   gap: 15px;
@@ -2452,7 +2487,7 @@ button:hover {
   padding: 24px 27px 30px;
   background: radial-gradient(var(--dot) 0.55px, transparent 0.65px) 0 0/24px 24px;
   scrollbar-width: thin;
-  scrollbar-color: var(--input) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 .timeline-lane {
   min-width: 0;
@@ -2498,7 +2533,7 @@ button:hover {
   overflow-x: auto;
   padding: 5px 0 14px;
   scrollbar-width: thin;
-  scrollbar-color: var(--input) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
   scroll-snap-type: x proximity;
 }
 .stage-events {
@@ -3059,7 +3094,7 @@ button:hover {
   flex: 1 1 auto;
   padding: 21px 28px 16px;
   scrollbar-width: thin;
-  scrollbar-color: var(--input) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 .editor-form input,
 .editor-form textarea,
@@ -3441,7 +3476,7 @@ button:hover {
   margin-top: 13px;
   min-height: 26px;
 }
-.evidence-card > p {
+.card-preview > p {
   margin-bottom: 0;
 }
 .card-meta {
@@ -4707,18 +4742,8 @@ button:hover {
 [data-slot='dialog-content'],
 .editor-scroll {
   scrollbar-width: thin;
-  scrollbar-color: var(--input) transparent;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
   overscroll-behavior: contain;
-}
-[data-slot='dialog-content']::-webkit-scrollbar {
-  width: 5px;
-}
-[data-slot='dialog-content']::-webkit-scrollbar-track {
-  background: transparent;
-}
-[data-slot='dialog-content']::-webkit-scrollbar-thumb {
-  background: var(--input);
-  border-radius: 8px;
 }
 
 /* Keep the hidden file control inside its label and out of the dialog scroll bounds. */
@@ -5133,4 +5158,137 @@ button:hover {
   .board-options {
     margin-left: auto;
   }
+}
+
+/* A corner grip keeps resizing separate from moving and opening a card. */
+.card-resize {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 0 0 10px 0;
+  background: none;
+  color: var(--primary);
+  cursor: nwse-resize;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+.evidence-card:hover .card-resize,
+.evidence-card:focus-within .card-resize,
+.card-resize:active {
+  opacity: 0.7;
+}
+.card-resize:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+@media (hover: none) {
+  .card-resize {
+    opacity: 0.7;
+    width: 30px;
+    height: 30px;
+  }
+}
+.evidence-card.card-sized {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 17px 20px;
+}
+.card-sized .card-type,
+.card-sized .card-footer {
+  flex-shrink: 0;
+}
+.card-sized .card-type > span:first-child {
+  min-width: 0;
+}
+.card-sized .card-kind-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card-sized .card-content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.card-sized h2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--card-title-lines, 3);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.card-sized .card-preview {
+  min-height: 0;
+  overflow: hidden;
+}
+.card-sized .card-preview > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--card-summary-lines, 3);
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.card-sized .card-image {
+  flex-shrink: 0;
+}
+.card-sized .card-footer {
+  flex-wrap: nowrap;
+  margin-top: 10px;
+}
+.card-sized .card-meta {
+  max-height: 26px;
+  overflow: hidden;
+}
+.evidence-card.card-compact {
+  padding: 11px 13px 13px;
+}
+.card-compact .card-kind-label,
+.card-compact .card-id,
+.card-compact .card-stamp > svg,
+.card-compact .card-image,
+.card-compact .card-preview,
+.card-compact .card-footer {
+  display: none;
+}
+.card-compact h2 {
+  font-size: 17px;
+  line-height: 1.25;
+  margin: 9px 0 0;
+  -webkit-line-clamp: 2;
+  flex-shrink: 1;
+}
+.card-compact-count {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: var(--muted-foreground);
+}
+.card-size-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.card-size-setting small {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+.card-size-setting button {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px 9px;
+  font-size: 11px;
+  color: var(--primary);
 }

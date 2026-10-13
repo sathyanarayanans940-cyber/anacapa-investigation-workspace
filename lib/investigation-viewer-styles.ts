@@ -9,6 +9,8 @@ export const styles = String.raw`
   --accent: #e8ddcd;
   --primary: #9b7b56;
   --dot: #ded2c1;
+  --scrollbar-thumb: var(--primary);
+  --scrollbar-thumb-hover: var(--ink);
 }
 :root.dark {
   color-scheme: dark;
@@ -23,6 +25,36 @@ export const styles = String.raw`
 }
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+@supports not (scrollbar-color: auto) {
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+  *::-webkit-scrollbar-button {
+    display: none;
+  }
+}
+@media (forced-colors: active) {
+  * {
+    scrollbar-color: auto !important;
+    scrollbar-width: auto !important;
+  }
 }
 body {
   margin: 0;
@@ -147,6 +179,56 @@ main {
 .card:hover {
   background: var(--paper);
   box-shadow: 0 5px 20px #33251419;
+}
+.card.sized-card {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 17px;
+}
+.sized-card .kind {
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sized-card h2 {
+  flex-shrink: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+.sized-card p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--preview-lines, 3);
+  overflow: hidden;
+  min-height: 0;
+  margin-bottom: 0;
+}
+.sized-card .detail,
+.sized-card .preview {
+  flex-shrink: 0;
+}
+.sized-card .detail {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card.compact-card {
+  padding: 11px 13px;
+}
+.compact-card .kind,
+.compact-card p,
+.compact-card .detail,
+.compact-card .preview {
+  display: none;
+}
+.compact-card h2 {
+  font-size: 17px;
+  margin: 0;
+  -webkit-line-clamp: 2;
+  flex-shrink: 1;
 }
 .kind {
   display: block;

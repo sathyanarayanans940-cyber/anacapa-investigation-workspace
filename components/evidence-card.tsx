@@ -1,6 +1,7 @@
 import { icons } from '@/lib/evidence-display';
 import { wallDateLabel as dateLabel } from '@/lib/local-date';
 import { titleOf, type Evidence } from '@/lib/case-data';
+import { compactCard, cardPreviewLines, cardPreviewText, type CardSize } from '@/lib/card-size';
 import { Pin, Pencil, Link2, ChevronRight, Plus } from 'lucide-react';
 export const visualColor = (color: string) =>
   ({
@@ -24,6 +25,12 @@ export function Card({
   onEdit,
   onExplore,
   onAddChild,
+  resizable,
+  onResizeDown,
+  onResizeMove,
+  onResizeUp,
+  onResizeCancel,
+  onResize,
 }: {
   n: Evidence;
   count: number;
@@ -38,18 +45,28 @@ export function Card({
   onEdit: () => void;
   onExplore: () => void;
   onAddChild: () => void;
+  resizable: boolean;
+  onResizeDown: (e: React.PointerEvent) => void;
+  onResizeMove: (e: React.PointerEvent) => void;
+  onResizeUp: (e: React.PointerEvent) => void;
+  onResizeCancel: () => void;
+  onResize: (size?: CardSize) => void;
 }) {
+  const compact = !!n.boardSize && compactCard(n.boardSize);
   const Icon = icons[n.kind],
     picture = n.images.find((i) =>
       ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(i.type),
     );
+  const lines = n.boardSize
+    ? cardPreviewLines(n.boardSize, titleOf(n), n.fields.length > 0, !!picture)
+    : 0;
   return (
     <div
       role="button"
       data-node-id={n.id}
       tabIndex={0}
       aria-label={`${interaction === 'tilt' ? 'Tilt' : interaction === 'pan' ? 'Pan board over' : 'Open'} ${titleOf(n)}`}
-      aria-description="Click to explore inside. Drag to move. Use the pencil to edit."
+      aria-description={`Click to explore inside. Drag to move. Use the pencil to edit.${resizable ? ' Drag the lower-right corner to resize.' : ''}`}
       aria-pressed={interaction === 'tilt' ? selected : undefined}
       onKeyDown={(e) => {
         if (e.target !== e.currentTarget) return;
@@ -61,13 +78,17 @@ export function Card({
       onPointerDown={onDown}
       onPointerMove={onMove}
       onPointerUp={onUp}
-      className={`evidence-card ${n.kind === 'Note' ? 'note-card' : ''} ${n.pinned ? 'key-card' : ''} ${selected ? 'connect-selected' : ''}`}
+      className={`evidence-card ${n.kind === 'Note' ? 'note-card' : ''} ${n.pinned ? 'key-card' : ''} ${selected ? 'connect-selected' : ''} ${n.boardSize ? 'card-sized' : ''} ${compact ? 'card-compact' : ''}`}
       style={
         {
           left: n.x,
           top: n.y,
+          width: n.boardSize?.width,
+          height: n.boardSize?.height,
           transform: `rotate(${n.rotation ?? (n.kind === 'Note' ? -2 : 0)}deg)`,
           '--node-color': visualColor(n.color),
+          '--card-title-lines': n.boardSize && n.boardSize.height < 220 ? 2 : 3,
+          '--card-summary-lines': n.boardSize ? lines : undefined,
         } as React.CSSProperties
       }
     >
@@ -75,9 +96,15 @@ export function Card({
       <div className="card-type">
         <span>
           <Icon size={14} />
-          {n.customKind || n.kind}
+          <span className="card-kind-label">{n.customKind || n.kind}</span>
         </span>
         <span className="card-stamp">
+          {compact && count > 0 && (
+            <span className="card-compact-count" title={`${count} sub-events`}>
+              {count}
+              <ChevronRight size={11} />
+            </span>
+          )}
           {n.pinned ? (
             <Pin size={13} />
           ) : (
@@ -98,10 +125,26 @@ export function Card({
           </button>
         </span>
       </div>
-      {picture && <img className="card-image" src={picture.url} alt={n.title} draggable={false} />}
-      <h2>{titleOf(n)}</h2>
-      <p>{n.summary.length > 115 ? n.summary.slice(0, 115) + '…' : n.summary}</p>
-      {n.fields[0] && <div className="card-field">{n.fields[0].value}</div>}
+      <div className="card-content">
+        {!compact && picture && (!n.boardSize || n.boardSize.height >= 320) && (
+          <img className="card-image" src={picture.url} alt={n.title} draggable={false} />
+        )}
+        <h2 title={titleOf(n)}>{titleOf(n)}</h2>
+        {!compact && (
+          <div className="card-preview">
+            <p>
+              {n.boardSize
+                ? cardPreviewText(n.summary, n.boardSize.width, lines)
+                : n.summary.length > 115
+                  ? n.summary.slice(0, 115) + '…'
+                  : n.summary}
+            </p>
+            {n.fields[0] && (!n.boardSize || n.boardSize.height >= 240) && (
+              <div className="card-field">{n.fields[0].value}</div>
+            )}
+          </div>
+        )}
+      </div>
       <div className="card-footer">
         <div className="card-meta">
           {crossCount > 0 && (
@@ -165,6 +208,69 @@ export function Card({
           </button>
         </div>
       </div>
+      {resizable && (
+        <button
+          type="button"
+          className="card-resize"
+          aria-label={`Resize ${titleOf(n)}`}
+          aria-description="Drag to resize. Arrow keys adjust width and height; Shift changes ten pixels. Home resets to automatic size."
+          title="Drag to resize · double-click to reset"
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onResizeDown(e);
+          }}
+          onPointerMove={(e) => {
+            e.stopPropagation();
+            onResizeMove(e);
+          }}
+          onPointerUp={(e) => {
+            e.stopPropagation();
+            onResizeUp(e);
+          }}
+          onPointerCancel={(e) => {
+            e.stopPropagation();
+            onResizeCancel();
+          }}
+          onLostPointerCapture={onResizeCancel}
+          onClick={(e) => e.stopPropagation()}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            onResize();
+          }}
+          onKeyDown={(e) => {
+            const steps: Record<string, [number, number]> = {
+              ArrowLeft: [-1, 0],
+              ArrowRight: [1, 0],
+              ArrowUp: [0, -1],
+              ArrowDown: [0, 1],
+            };
+            if (e.key === 'Home') {
+              e.preventDefault();
+              e.stopPropagation();
+              onResize();
+            }
+            const step = steps[e.key];
+            if (!step) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const card = e.currentTarget.closest<HTMLElement>('.evidence-card')!;
+            onResize({
+              width: card.offsetWidth + step[0] * (e.shiftKey ? 10 : 1),
+              height: card.offsetHeight + step[1] * (e.shiftKey ? 10 : 1),
+            });
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path
+              d="M5 13 13 5M9 13 13 9M13 13h.01"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
