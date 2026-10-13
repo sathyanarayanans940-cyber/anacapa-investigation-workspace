@@ -1,4 +1,5 @@
 import { compareEvents } from '@/lib/provenance';
+import { cardTypeTone } from '@/lib/card-type-tone';
 import { wallDateLabel, timeLabel, timestamp } from '@/lib/local-date';
 ('use client');
 import { useRef } from 'react';
@@ -120,6 +121,7 @@ function TimelineLane({
               open = !flat && expanded.has(n.id),
               { side, style } = timelinePresentation(n, index),
               title = titleOf(n);
+            const tone = cardTypeTone(n);
             return (
               <article
                 key={n.id}
@@ -148,11 +150,30 @@ function TimelineLane({
                     {children > 0 && !flat && <ChevronDown size={11} />}
                   </button>
                 </div>
-                <div className="stage-card">
+                <div
+                  className="stage-card"
+                  data-confidence={n.confidence.toLowerCase()}
+                  data-priority={n.pinned}
+                  data-node-id={n.id}
+                  data-type={tone.type}
+                  style={
+                    {
+                      '--card-custom-hue': tone.hue,
+                      '--card-custom-saturation': `${tone.saturation}%`,
+                      '--card-custom-lift': `${tone.lift}%`,
+                    } as React.CSSProperties
+                  }
+                >
                   <div className="stage-card-heading">
                     <span className="stage-kind">
                       {n.customKind || n.kind}
-                      {n.pinned && <Pin size={12} />}
+                      <span className="stage-confidence">· {n.confidence}</span>
+                      {n.pinned && (
+                        <span className="card-priority" title="Pinned as a priority">
+                          <Pin size={12} />
+                          <span>Priority</span>
+                        </span>
+                      )}
                     </span>
                     <div className="stage-card-tools">
                       <button

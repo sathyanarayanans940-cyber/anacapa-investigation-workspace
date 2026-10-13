@@ -433,8 +433,9 @@ test('each board card resizes at board zoom, saves/reloads, undoes, and keeps ev
   await page.mouse.move(corner.x + corner.width / 2, corner.y + corner.height / 2);
   await page.mouse.down();
   await page.mouse.move(
-    corner.x + corner.width / 2 + (160 - current.width) * z,
-    corner.y + corner.height / 2 + (100 - current.height) * z,
+    // Move past the bounds so screen-pixel rounding cannot leave a fractional size above them.
+    corner.x + corner.width / 2 + (140 - current.width) * z,
+    corner.y + corner.height / 2 + (80 - current.height) * z,
     { steps: 8 },
   );
   await page.mouse.up();

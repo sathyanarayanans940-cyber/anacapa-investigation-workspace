@@ -31,6 +31,7 @@ import { Evidence, NodeKind, colors, descendants } from '@/lib/case-data';
 import { toast } from 'sonner';
 import { evidenceSchema } from '@/lib/validation';
 import { validDateRange } from '@/lib/local-date';
+import { cardTypeTone } from '@/lib/card-type-tone';
 export function Picker({
   value,
   onChange,
@@ -94,6 +95,7 @@ export function EvidenceEditor({
     [custom, setCustom] = useState(!!initial.customKind),
     [more, setMore] = useState(!simple);
   const patch = (v: Partial<Evidence>) => setN((s) => ({ ...s, ...v }));
+  const customTone = cardTypeTone(n);
   const existing = nodes.some((x) => x.id === n.id),
     excluded = new Set([n.id, ...descendants(nodes, n.id)]),
     childCount = nodes.filter((x) => x.parentId === n.id).length;
@@ -221,12 +223,27 @@ export function EvidenceEditor({
                 <label>
                   Custom type
                   <input
+                    aria-label="Custom type"
                     required
                     maxLength={80}
                     value={n.customKind || ''}
                     onChange={(e) => patch({ customKind: e.target.value })}
                     placeholder="Interview, transaction, device…"
                   />
+                  {n.customKind?.trim() && (
+                    <small
+                      className="custom-type-colour"
+                      style={
+                        {
+                          '--card-custom-hue': customTone.hue,
+                          '--card-custom-saturation': `${customTone.saturation}%`,
+                          '--card-custom-lift': `${customTone.lift}%`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <i aria-hidden="true" />A consistent colour for this custom type
+                    </small>
+                  )}
                 </label>
               )}
               <label>
@@ -539,6 +556,9 @@ export function EvidenceEditor({
                           label: v,
                         }))}
                       />
+                      <small className="field-help">
+                        Sets the card’s shade: Unverified, Likely, or Confirmed.
+                      </small>
                     </label>
                     <label>
                       Show as the card title
@@ -583,7 +603,7 @@ export function EvidenceEditor({
                     <label className="switch-row">
                       <span>
                         <Pin size={16} />
-                        Pin this evidence
+                        Pin as priority
                       </span>
                       <Switch checked={n.pinned} onCheckedChange={(v) => patch({ pinned: v })} />
                     </label>

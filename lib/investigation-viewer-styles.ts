@@ -11,17 +11,39 @@ export const styles = String.raw`
   --dot: #ded2c1;
   --scrollbar-thumb: var(--primary);
   --scrollbar-thumb-hover: var(--ink);
+  --card-copy: #544a3d;
+  --card-type-person: #547783;
+  --card-type-event: #97694c;
+  --card-type-location: #71805b;
+  --card-type-digital: #927282;
+  --card-type-document: #9d834b;
+  --card-type-note: #aaa062;
+  --card-custom-lightness: 52%;
+  --card-weight-unverified: 12%;
+  --card-weight-likely: 27%;
+  --card-weight-confirmed: 42%;
 }
 :root.dark {
   color-scheme: dark;
   --bg: #28241f;
-  --paper: #353029;
+  --paper: #38312a;
   --ink: #e9dfcf;
   --muted: #b3a692;
   --line: #4c4235;
   --accent: #45392c;
   --primary: #c4a77c;
   --dot: #524638;
+  --card-copy: #eadfce;
+  --card-type-person: #758d9a;
+  --card-type-event: #a6815a;
+  --card-type-location: #8a976d;
+  --card-type-digital: #a38795;
+  --card-type-document: #b19b69;
+  --card-type-note: #adab83;
+  --card-custom-lightness: 52%;
+  --card-weight-unverified: 10%;
+  --card-weight-likely: 25%;
+  --card-weight-confirmed: 40%;
 }
 * {
   box-sizing: border-box;
@@ -775,5 +797,64 @@ header {
   footer {
     flex-wrap: wrap;
   }
+}
+
+/* Shared cards use the same type, confidence and priority cues as the editor. */
+.card, .event-body {
+  --card-type-ink: var(--card-type-event);
+  --card-confidence-weight: var(--card-weight-unverified);
+  --card-tone-bg: color-mix(in srgb, var(--paper) calc(100% - var(--card-confidence-weight)), var(--card-type-ink) var(--card-confidence-weight));
+  --muted: var(--card-copy);
+  --line: color-mix(in srgb, var(--card-copy) 24%, transparent);
+}
+#scene .card, .event-body, .event.event-style-note .event-body {
+  background: var(--card-tone-bg);
+}
+.card[data-confidence="likely"], .event-body[data-confidence="likely"] { --card-confidence-weight: var(--card-weight-likely); }
+.card[data-confidence="confirmed"], .event-body[data-confidence="confirmed"] { --card-confidence-weight: var(--card-weight-confirmed); }
+ .card[data-type="person"], .event-body[data-type="person"] { --card-type-ink: var(--card-type-person); }
+ .card[data-type="event"], .event-body[data-type="event"] { --card-type-ink: var(--card-type-event); }
+ .card[data-type="location"], .event-body[data-type="location"] { --card-type-ink: var(--card-type-location); }
+ .card[data-type="digital"], .event-body[data-type="digital"] { --card-type-ink: var(--card-type-digital); }
+ .card[data-type="document"], .event-body[data-type="document"] { --card-type-ink: var(--card-type-document); }
+ .card[data-type="note"], .event-body[data-type="note"] { --card-type-ink: var(--card-type-note); }
+
+.card[data-type="custom"], .event-body[data-type="custom"] {
+  --card-type-ink: hsl(var(--card-custom-hue) var(--card-custom-saturation) calc(var(--card-custom-lightness) + var(--card-custom-lift)));
+}
+#scene .card[data-priority="true"], .event-body[data-priority="true"] {
+  border-color: color-mix(in srgb, var(--primary) 75%, var(--card-tone-bg));
+  border-width: 1.5px;
+}
+.card .kind {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+}
+.card-confidence, .card-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.card-confidence {
+  margin-top: 12px;
+  flex-shrink: 0;
+}
+.card-status-mark {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+[data-confidence="likely"] .card-status-mark { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+[data-confidence="confirmed"] .card-status-mark { background: currentColor; }
+.card.compact-card .kind, .card.compact-card .card-confidence { display: none; }
+.event-actions button { color: var(--muted); }
+@media (forced-colors: active) {
+  #scene .card, .event-body { background: Canvas !important; --muted: CanvasText; color: CanvasText; border-color: CanvasText !important; }
 }
 `;

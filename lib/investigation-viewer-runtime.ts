@@ -1,5 +1,6 @@
 import { wirePath } from './connection-path.ts';
 import { cardAnchor, compactCard, cardPreviewLines, cardPreviewText } from './card-size.ts';
+import { cardTypeTone } from './card-type-tone.ts';
 
 export const script = String.raw`
 (async function () {
@@ -9,6 +10,7 @@ export const script = String.raw`
   const compactCard = ${compactCard.toString()};
   const cardPreviewLines = ${cardPreviewLines.toString()};
   const cardPreviewText = ${cardPreviewText.toString()};
+  const cardTypeTone = ${cardTypeTone.toString()};
   document.documentElement.classList.toggle(
     'dark',
     window.matchMedia('(prefers-color-scheme: dark)').matches,
@@ -187,6 +189,13 @@ export const script = String.raw`
   }
   function card(n, onBoard = false) {
     const b = el('button', 'card');
+    const tone = cardTypeTone(n);
+    b.dataset.type = tone.type;
+    if (tone.type === 'custom') {
+      b.style.setProperty('--card-custom-hue', tone.hue);
+      b.style.setProperty('--card-custom-saturation', tone.saturation + '%');
+      b.style.setProperty('--card-custom-lift', tone.lift + '%');
+    }
     const pic = n.images.find((a) => imageTypes.includes(a.type));
     const compact = onBoard && n.boardSize && compactCard(n.boardSize);
     const lines = onBoard && n.boardSize ? cardPreviewLines(n.boardSize, headline(n), n.fields.length > 0, !!pic) : 0;
@@ -199,11 +208,17 @@ export const script = String.raw`
     }
     b.type = 'button';
     b.dataset.nodeId = n.id;
+    b.dataset.confidence = n.confidence.toLowerCase();
+    b.dataset.priority = String(n.pinned);
     b.setAttribute('aria-label', 'View ' + headline(n));
+    b.setAttribute('aria-description', n.confidence + ' confidence.' + (n.pinned ? ' Priority card.' : ''));
+    b.title = n.confidence + (n.pinned ? ' · Priority' : '');
     b.onclick = () => open(n);
+    const kind = el('span', 'kind', n.customKind || n.kind);
+    if (n.pinned) kind.append(el('span', 'card-priority', 'Priority'));
     b.append(
       el('i', 'pin'),
-      el('span', 'kind', n.customKind || n.kind),
+      kind,
       el('h2', '', headline(n)),
       el('p', '', compact ? '' : onBoard && n.boardSize ? cardPreviewText(n.summary, n.boardSize.width, lines) : n.summary.slice(0, 160)),
     );
@@ -215,6 +230,9 @@ export const script = String.raw`
       img.draggable = false;
       b.append(img);
     }
+    const confidence = el('span', 'card-confidence');
+    confidence.append(el('i', 'card-status-mark'), el('span', '', n.confidence));
+    b.append(confidence);
     return b;
   }
   function render() {
@@ -444,6 +462,15 @@ export const script = String.raw`
         ),
       );
       const item = card(n);
+      body.dataset.confidence = n.confidence.toLowerCase();
+      body.dataset.priority = String(n.pinned);
+      body.dataset.type = item.dataset.type;
+      if (item.dataset.type === 'custom') {
+        const tone = cardTypeTone(n);
+        body.style.setProperty('--card-custom-hue', tone.hue);
+        body.style.setProperty('--card-custom-saturation', tone.saturation + '%');
+        body.style.setProperty('--card-custom-lift', tone.lift + '%');
+      }
       if (style !== 'card') item.querySelector('.preview')?.remove();
       body.append(item);
       event.append(axis, body);

@@ -15,6 +15,7 @@ Anacapa is a local web app. React renders the workspace; a loopback-only Node se
 | `components/timeline-*.tsx`, `relationships.tsx`                               | Nested chronology and links between branches.                                      |
 | `lib/validation.ts`, `case-data.ts`, `provenance.ts`                           | Shared model, bounded schema, and material-versus-layout change rules.             |
 | `lib/card-size.ts` | Per-card resize bounds, rotated/zoomed geometry, compact previews, and anchors. |
+| `lib/card-type-tone.ts` | Named type families and stable custom-type hues, shared by editor and exported viewer. |
 | `lib/connection-path.ts`, `thread-layout.ts`                                   | Per-wire geometry, endpoint lookup, and label placement.                           |
 | `lib/investigation-package.ts`                                                 | Portable case format, original bytes, import validation, and filename rules.       |
 | `lib/investigation-viewer*.ts`                                                 | Standalone HTML packaging, readable viewer script, and viewer styles.              |
@@ -30,6 +31,8 @@ The editor holds a draft until Save. Applying an edit validates the workspace an
 `lib/card-size.ts` owns bounded resize geometry, preview density, and wire anchors. Optional `Evidence.boardSize` preserves old automatic layouts, while explicit sizes are validated at 160–720 px wide and 100–640 px tall. Pointer movement is converted through board zoom and card rotation; adjusting position keeps the opposite corner fixed. A completed drag creates one undo entry, and cancellation restores its starting state. Compact previews hide content rather than modifying evidence. Editable packages and shared HTML retain board dimensions; timeline layouts remain separate.
 
 Autosave sends a workspace revision. A stale revision produces a conflict and keeps the local draft for recovery. One queue drains later edits made while a save is in flight. Case history is permanent; session undo is separate and retains the latest 40 actions. Full revision snapshots and original files occupy disk space over time.
+
+Card fills derive from existing type and confidence values, with no additional persisted colour field. CSS blends each type's palette ink into the base card surface at three confidence strengths. Custom labels use an NFKC-normalized, case-folded name hash for stable hue, saturation, and lightness variation. The viewer embeds the same pure helper. Priority uses the existing pin and a labelled border, independently of confidence. Colour changes follow the four editor palettes and the viewer's light/dark appearance; they do not alter case records.
 
 ## Distribution
 

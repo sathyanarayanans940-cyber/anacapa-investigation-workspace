@@ -29,6 +29,17 @@
   --note: #ede3cc;
   --thread: #b49c7b;
   --shadow: 0 5px 18px #5b483207;
+  --card-copy: #544a3d;
+  --card-type-person: #547783;
+  --card-type-event: #97694c;
+  --card-type-location: #71805b;
+  --card-type-digital: #927282;
+  --card-type-document: #9d834b;
+  --card-type-note: #aaa062;
+  --card-custom-lightness: 52%;
+  --card-weight-unverified: 12%;
+  --card-weight-likely: 27%;
+  --card-weight-confirmed: 42%;
 }
 [data-theme='daylight'] {
   --background: #f4f3ef;
@@ -50,6 +61,7 @@
   --canvas: #f1f1eb;
   --dot: #d5d8cb;
   --note: #ecebd9;
+  --card-copy: #424b3a;
 }
 [data-theme='midnight'] {
   --background: #28241f;
@@ -72,6 +84,17 @@
   --dot: #514336;
   --note: #443b2b;
   --shadow: 0 5px 18px #0001;
+  --card-copy: #eadfce;
+  --card-type-person: #758d9a;
+  --card-type-event: #a6815a;
+  --card-type-location: #8a976d;
+  --card-type-digital: #a38795;
+  --card-type-document: #b19b69;
+  --card-type-note: #adab83;
+  --card-custom-lightness: 52%;
+  --card-weight-unverified: 10%;
+  --card-weight-likely: 25%;
+  --card-weight-confirmed: 40%;
 }
 [data-theme='blueprint'] {
   --background: #252c2e;
@@ -94,6 +117,17 @@
   --dot: #485451;
   --note: #42463a;
   --shadow: 0 5px 18px #0001;
+  --card-copy: #e6e9dd;
+  --card-type-person: #758d9a;
+  --card-type-event: #a6815a;
+  --card-type-location: #8a976d;
+  --card-type-digital: #a38795;
+  --card-type-document: #b19b69;
+  --card-type-note: #adab83;
+  --card-custom-lightness: 52%;
+  --card-weight-unverified: 10%;
+  --card-weight-likely: 25%;
+  --card-weight-confirmed: 40%;
 }
 @theme inline {
   --color-background: var(--background);
@@ -5291,4 +5325,165 @@ button:hover {
   padding: 6px 9px;
   font-size: 11px;
   color: var(--primary);
+}
+
+/* Type sets the colour family, confidence its strength, and the pin marks priority. */
+.evidence-card,
+.stage-card {
+  --card-type-ink: var(--card-type-event);
+  --card-confidence-weight: var(--card-weight-unverified);
+  --card-tone-bg: color-mix(
+    in srgb,
+    var(--card) calc(100% - var(--card-confidence-weight)),
+    var(--card-type-ink) var(--card-confidence-weight)
+  );
+  --muted-foreground: var(--card-copy);
+  --border: color-mix(in srgb, var(--card-copy) 24%, transparent);
+  background: var(--card-tone-bg);
+  border-color: var(--border);
+}
+.evidence-card[data-confidence='likely'],
+.stage-card[data-confidence='likely'] {
+  --card-confidence-weight: var(--card-weight-likely);
+}
+.evidence-card[data-type='person'],
+.stage-card[data-type='person'] {
+  --card-type-ink: var(--card-type-person);
+}
+.evidence-card[data-type='event'],
+.stage-card[data-type='event'] {
+  --card-type-ink: var(--card-type-event);
+}
+.evidence-card[data-type='location'],
+.stage-card[data-type='location'] {
+  --card-type-ink: var(--card-type-location);
+}
+.evidence-card[data-type='digital'],
+.stage-card[data-type='digital'] {
+  --card-type-ink: var(--card-type-digital);
+}
+.evidence-card[data-type='document'],
+.stage-card[data-type='document'] {
+  --card-type-ink: var(--card-type-document);
+}
+.evidence-card[data-type='note'],
+.stage-card[data-type='note'] {
+  --card-type-ink: var(--card-type-note);
+}
+.evidence-card[data-type='custom'],
+.stage-card[data-type='custom'] {
+  --card-type-ink: hsl(
+    var(--card-custom-hue) var(--card-custom-saturation)
+      calc(var(--card-custom-lightness) + var(--card-custom-lift))
+  );
+}
+.evidence-card[data-confidence='confirmed'],
+.stage-card[data-confidence='confirmed'] {
+  --card-confidence-weight: var(--card-weight-confirmed);
+}
+.evidence-card[data-priority='true'],
+.stage-card[data-priority='true'] {
+  background: var(--card-tone-bg);
+  border-color: color-mix(in srgb, var(--primary) 75%, var(--card-tone-bg));
+  border-width: 1.5px;
+}
+.evidence-card.note-card,
+.stage-style-note .stage-card {
+  border: 1px solid var(--border);
+  background: var(--card-tone-bg);
+}
+.evidence-card.note-card[data-priority='true'],
+.stage-style-note .stage-card[data-priority='true'] {
+  background: var(--card-tone-bg);
+  border-color: color-mix(in srgb, var(--primary) 75%, var(--card-tone-bg));
+}
+.evidence-card .card-type,
+.evidence-card .card-crosslink,
+.evidence-card h2,
+.evidence-card p,
+.stage-card h2,
+.stage-card p,
+.stage-style-note .stage-card p,
+.stage-card-actions button {
+  color: var(--muted-foreground);
+}
+.stage-card-content:hover,
+.stage-style-note .stage-card-content:hover {
+  background: color-mix(in srgb, var(--card-tone-bg) 94%, var(--primary));
+}
+.evidence-card .card-crosslink:hover,
+.evidence-card .card-children:hover {
+  color: var(--foreground);
+}
+.card-confidence,
+.card-priority {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.card-priority svg {
+  flex-shrink: 0;
+}
+.card-status-mark {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+[data-confidence='likely'] .card-status-mark {
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+[data-confidence='confirmed'] .card-status-mark {
+  background: currentColor;
+}
+.card-type .card-status-mark {
+  display: none;
+}
+.card-compact .card-type .card-status-mark {
+  display: inline-block;
+}
+.card-compact .card-priority-label {
+  display: none;
+}
+.stage-kind {
+  flex-wrap: wrap;
+  gap: 4px 7px;
+}
+.stage-confidence {
+  font-size: 10px;
+  white-space: nowrap;
+}
+.custom-type-colour {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+.custom-type-colour i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: hsl(
+    var(--card-custom-hue) var(--card-custom-saturation)
+      calc(var(--card-custom-lightness) + var(--card-custom-lift))
+  );
+}
+@media (forced-colors: active) {
+  .evidence-card,
+  .stage-card {
+    background: Canvas !important;
+    color: CanvasText;
+    --muted-foreground: CanvasText;
+    border-color: CanvasText !important;
+  }
+  [data-priority='true'].evidence-card,
+  [data-priority='true'].stage-card {
+    border-width: 2px;
+  }
 }

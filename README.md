@@ -61,6 +61,8 @@ The bottom toolbar offers Select, Pan, Connect, and Tilt. Hover or focus for lab
 
 Scrollbars throughout the editor and newly exported HTML viewers use the active palette’s accent colour with a transparent track. Existing HTML snapshots keep the styles embedded when they were exported; download a new viewer to get appearance updates.
 
+Card colours describe two independent things: the colour family follows the evidence **type**, while shade strength follows **Unverified**, **Likely**, or **Confirmed** confidence. **Custom types** get their own consistent muted colour from the type name; the same name keeps its colour across cases, themes, and newly exported HTML. A priority pin adds a stronger border and a **Priority** label without changing the confidence shade. Text labels and status marks keep the meaning readable without relying on colour alone. Use the pencil → **Card appearance & labels** to change Confidence or **Pin as priority**. These are user-recorded assessments, not automatic verification of evidence.
+
 On narrow screens, the header’s magnifying glass opens evidence search. The labelled **Timeline** tab opens the chart; choose **List** for a compact chronological view. Search includes nested cards, and Clear search restores the branch. Ctrl/⌘ K opens the appropriate search control at any width.
 
 For larger cases, keep the main board focused on the key events and group nearby people, places, documents, and devices around them. Put detailed sequences inside their parent cards, then use Relationships to link shared evidence across branches. The board is freely arranged; synthetic benchmark grids do not set its layout. Showing every item and link at once will become crowded, so use nested boards, search, and filters as a case grows.

@@ -2,6 +2,7 @@ import { icons } from '@/lib/evidence-display';
 import { wallDateLabel as dateLabel } from '@/lib/local-date';
 import { titleOf, type Evidence } from '@/lib/case-data';
 import { compactCard, cardPreviewLines, cardPreviewText, type CardSize } from '@/lib/card-size';
+import { cardTypeTone } from '@/lib/card-type-tone';
 import { Pin, Pencil, Link2, ChevronRight, Plus } from 'lucide-react';
 export const visualColor = (color: string) =>
   ({
@@ -53,6 +54,7 @@ export function Card({
   onResize: (size?: CardSize) => void;
 }) {
   const compact = !!n.boardSize && compactCard(n.boardSize);
+  const tone = cardTypeTone(n);
   const Icon = icons[n.kind],
     picture = n.images.find((i) =>
       ['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(i.type),
@@ -64,9 +66,12 @@ export function Card({
     <div
       role="button"
       data-node-id={n.id}
+      data-confidence={n.confidence.toLowerCase()}
+      data-type={tone.type}
+      data-priority={n.pinned}
       tabIndex={0}
       aria-label={`${interaction === 'tilt' ? 'Tilt' : interaction === 'pan' ? 'Pan board over' : 'Open'} ${titleOf(n)}`}
-      aria-description={`Click to explore inside. Drag to move. Use the pencil to edit.${resizable ? ' Drag the lower-right corner to resize.' : ''}`}
+      aria-description={`${n.confidence} confidence.${n.pinned ? ' Priority card.' : ''} Click to explore inside. Drag to move. Use the pencil to edit.${resizable ? ' Drag the lower-right corner to resize.' : ''}`}
       aria-pressed={interaction === 'tilt' ? selected : undefined}
       onKeyDown={(e) => {
         if (e.target !== e.currentTarget) return;
@@ -87,6 +92,9 @@ export function Card({
           height: n.boardSize?.height,
           transform: `rotate(${n.rotation ?? (n.kind === 'Note' ? -2 : 0)}deg)`,
           '--node-color': visualColor(n.color),
+          '--card-custom-hue': tone.hue,
+          '--card-custom-saturation': `${tone.saturation}%`,
+          '--card-custom-lift': `${tone.lift}%`,
           '--card-title-lines': n.boardSize && n.boardSize.height < 220 ? 2 : 3,
           '--card-summary-lines': n.boardSize ? lines : undefined,
         } as React.CSSProperties
@@ -96,6 +104,11 @@ export function Card({
       <div className="card-type">
         <span>
           <Icon size={14} />
+          <i
+            className="card-status-mark"
+            title={`Confidence: ${n.confidence}`}
+            aria-hidden="true"
+          />
           <span className="card-kind-label">{n.customKind || n.kind}</span>
         </span>
         <span className="card-stamp">
@@ -106,7 +119,10 @@ export function Card({
             </span>
           )}
           {n.pinned ? (
-            <Pin size={13} />
+            <span className="card-priority" title="Pinned as a priority">
+              <Pin size={12} />
+              <span className="card-priority-label">Priority</span>
+            </span>
           ) : (
             <span className="card-id">{n.date ? dateLabel(n.date) : 'Undated'}</span>
           )}
@@ -163,7 +179,10 @@ export function Card({
               {crossCount} {crossCount === 1 ? 'link' : 'links'}
             </button>
           )}
-          {n.confidence === 'Unverified' && <span className="uncertain">Unverified</span>}
+          <span className="card-confidence">
+            <i className="card-status-mark" aria-hidden="true" />
+            {n.confidence}
+          </span>
           {n.tags.filter(Boolean).length > 0 && (
             <div className="card-tags">
               {n.tags

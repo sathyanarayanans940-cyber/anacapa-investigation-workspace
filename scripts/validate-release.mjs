@@ -86,7 +86,7 @@ const report = {
     failed: browser.stats.unexpected,
     skipped: browser.stats.skipped,
     scope:
-      'Desktop editing and reload, mobile search and timeline, drag/resize/undo/pan, compact previews, nested resizing in Simple controls, case storage, offline HTML at 320/390/650/1280px, and theme-coloured scrollbars across editor/viewer regions.',
+      'Desktop editing and reload, mobile search and timeline, drag/resize/undo/pan, compact previews, nested resizing in Simple controls, case storage, offline HTML at 320/390/650/1280px, theme-coloured scrollbars, and type/custom/confidence/priority colours with board/timeline text contrast across editor/viewer palettes.',
   },
   interactiveVisualCheck:
     'Automated browser workflows passed. Complete manual accessibility and device review remains pending.',
@@ -96,6 +96,7 @@ const report = {
     'Manifest identity, appearance overrides, all 104 PNG icon assets, and case storage growth.',
     'Case validation, nested timelines, links, source records, placement, and save conflict recovery.',
     'Per-card sizes, zoom/rotation resize geometry, cancellation, compact previews, and portable layout preservation.',
+    'Type and custom-type colours, confidence shades, independent priority, theme changes, and readable board/timeline text.',
     'Portable packages, protected sharing, redaction, and local API session restrictions.',
     'Advanced encryption, account roles, original hashes, history, custody, and folder backups.',
     'Simple controls data preservation, signed checkpoint chains, rollback detection, missing storage, and interrupted save recovery.',

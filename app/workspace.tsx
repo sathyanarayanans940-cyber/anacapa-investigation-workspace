@@ -2097,6 +2097,13 @@ export default function Page() {
                 the line and choose Card, Compact, or Note.
               </p>
               <p>
+                <strong>Read the card colours.</strong> The colour family follows the evidence type.
+                Custom types get a consistent colour from their name. Shade strength shows
+                Unverified, Likely, or Confirmed confidence. Open the pencil, then Card appearance &
+                labels to change Confidence. Pin as priority adds emphasis at any confidence level.
+                Colours follow the current palette and carry into new HTML snapshots.
+              </p>
+              <p>
                 <strong>Save and share.</strong> Changes save on this computer. Share → Download to
                 edit creates a .anacapa file; open it through the case menu. Download to view
                 creates an HTML snapshot anyone can open in a browser.

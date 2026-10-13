@@ -2,11 +2,11 @@
   "format": "anacapa-release-validation",
   "version": 1,
   "appVersion": "0.4.1",
-  "generatedAt": "2026-10-13T14:29:09.786Z",
-  "sourceSha256": "98a3839ee39d7433b556ea806b3c4c2cb21f468e905cab1e66f950223ad55e3d",
+  "generatedAt": "2026-10-13T18:53:33.278Z",
+  "sourceSha256": "296de2eaf568d87a4ba6b66cf52bc0a1ad9bfb3867e940b2794ec76ccd395252",
   "runtime": "v22.13.0",
   "platform": "darwin",
-  "sourceFiles": 108,
+  "sourceFiles": 110,
   "typecheck": "passed",
   "automated": {
     "tests": 99,
@@ -41,10 +41,10 @@
   "browser": {
     "engine": "Google Chrome",
     "channel": "chrome",
-    "passed": 14,
+    "passed": 16,
     "failed": 0,
     "skipped": 0,
-    "scope": "Desktop editing and reload, mobile search and timeline, drag/resize/undo/pan, compact previews, nested resizing in Simple controls, case storage, offline HTML at 320/390/650/1280px, and theme-coloured scrollbars across editor/viewer regions."
+    "scope": "Desktop editing and reload, mobile search and timeline, drag/resize/undo/pan, compact previews, nested resizing in Simple controls, case storage, offline HTML at 320/390/650/1280px, theme-coloured scrollbars, and type/custom/confidence/priority colours with board/timeline text contrast across editor/viewer palettes."
   },
   "interactiveVisualCheck": "Automated browser workflows passed. Complete manual accessibility and device review remains pending.",
   "independentSecurityReview": "Not performed or established by this report.",
@@ -53,6 +53,7 @@
     "Manifest identity, appearance overrides, all 104 PNG icon assets, and case storage growth.",
     "Case validation, nested timelines, links, source records, placement, and save conflict recovery.",
     "Per-card sizes, zoom/rotation resize geometry, cancellation, compact previews, and portable layout preservation.",
+    "Type and custom-type colours, confidence shades, independent priority, theme changes, and readable board/timeline text.",
     "Portable packages, protected sharing, redaction, and local API session restrictions.",
     "Advanced encryption, account roles, original hashes, history, custody, and folder backups.",
     "Simple controls data preservation, signed checkpoint chains, rollback detection, missing storage, and interrupted save recovery."
