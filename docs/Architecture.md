@@ -6,8 +6,9 @@ Anacapa is a local web app. React renders the workspace; a loopback-only Node se
 | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
 | `app/workspace.tsx`                                                            | Orchestrates current case, views, editing drafts, undo, and protected changes.     |
 | `hooks/use-workspace-persistence.ts`                                           | Autosave queue, revision checks, save conflicts, retry, and unload protection.     |
-| `hooks/use-case-navigation.ts`                                                 | Branch, board/timeline mode, and camera reset when navigating.                     |
-| `hooks/use-board-gestures.ts`                                                  | Pointer capture, drag/cancel, pan, zoom, and drag undo boundaries.                 |
+| `hooks/use-case-navigation.ts`                                                 | Branch, board/timeline mode, and transient selection when navigating.                     |
+| `hooks/use-board-gestures.ts`                                                  | Pointer capture, drag/cancel, pan, and drag undo boundaries.                 |
+| `hooks/use-board-camera.ts`, `lib/board-camera.ts`, `components/board-zoom.tsx` | View framing, pointer-anchored zoom, percentage input, persistent device zoom lock, and viewport resizing. |
 | `hooks/use-board-actions.ts`                                                   | Stable scene callbacks that read the current case and tool.                        |
 | `components/board-contents.tsx`                                                | Memoized card/wire scene; dialog typing and camera changes can skip its rendering. |
 | `components/evidence-card.tsx`, `evidence-editor.tsx`, `connection-editor.tsx` | Card presentation and separate edit dialogs.                                       |
@@ -29,6 +30,8 @@ Anacapa is a local web app. React renders the workspace; a loopback-only Node se
 The editor holds a draft until Save. Applying an edit validates the workspace and records an undo boundary. Advanced cases require a reason for material evidence changes. Position, board size, colour, wire shape, and label offsets are layout changes. Dashed uncertainty remains a material relationship property.
 
 `lib/card-size.ts` owns bounded resize geometry, preview density, and wire anchors. Optional `Evidence.boardSize` preserves old automatic layouts, while explicit sizes are validated at 160–720 px wide and 100–640 px tall. Pointer movement is converted through board zoom and card rotation; adjusting position keeps the opposite corner fixed. A completed drag creates one undo entry, and cancellation restores its starting state. Compact previews hide content rather than modifying evidence. Editable packages and shared HTML retain board dimensions; timeline layouts remain separate.
+
+Board viewing state is separate from evidence and case history. Framing uses measured, rotated card bounds and relationship labels with margins for floating controls. Automatic framing waits for font metrics and is cancelled when the user changes the view. Percentage buttons use functional camera updates so rapid clicks accumulate. Non-passive wheel handling prevents a pinch from also zooming the browser page. A device preference stores the locked scale; entering another branch or case centres at that scale, while unlocking restores zoom gestures. Window resizing keeps the world point at the viewport centre without changing scale. Expanded board view hides surrounding app chrome and retains the same zoom.
 
 Autosave sends a workspace revision. A stale revision produces a conflict and keeps the local draft for recovery. One queue drains later edits made while a save is in flight. Case history is permanent; session undo is separate and retains the latest 40 actions. Full revision snapshots and original files occupy disk space over time.
 

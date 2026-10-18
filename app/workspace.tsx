@@ -1,4 +1,6 @@
 import { BoardContents } from '@/components/board-contents';
+import { BoardZoom } from '@/components/board-zoom';
+import { useBoardCamera } from '@/hooks/use-board-camera';
 import { useBoardActions } from '@/hooks/use-board-actions';
 import { EvidenceSearch } from '@/components/evidence-search';
 import { useCaseNavigation } from '@/hooks/use-case-navigation';
@@ -22,8 +24,6 @@ import {
   ChevronRight,
   Pin,
   SlidersHorizontal,
-  Focus,
-  Minus,
   Layers,
   FolderOpen,
   CircleHelp,
@@ -58,7 +58,6 @@ import { AppearanceSettings } from '@/components/appearance-settings';
 import { useAppearance } from '@/components/use-appearance';
 import { TimelineRibbon } from '@/components/timeline-ribbon';
 import { TimelineStage } from '@/components/timeline-stage';
-import { threadLayout } from '@/lib/thread-layout';
 import { Relationships } from '@/components/relationships';
 import { crossBranchCounts } from '@/lib/relationships';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -121,6 +120,7 @@ export default function Page() {
   const [onlyPins, setOnlyPins] = useState(false);
   const [showThreads, setShowThreads] = useState(true);
   const [tool, setTool] = useState('select');
+  const [boardExpanded, setBoardExpanded] = useState(false);
   const [tiltId, setTiltId] = useState<string | null>(null);
   const [connectFrom, setConnectFrom] = useState<string | null>(null);
   const [thread, setThread] = useState<Thread | null>(null);
@@ -150,8 +150,6 @@ export default function Page() {
     setTimelineView,
     scope,
     setScope,
-    camera,
-    setCamera,
     navigate,
     expandTimeline,
   } = useCaseNavigation(() => {
@@ -159,8 +157,6 @@ export default function Page() {
     setQuery('');
     setConnectFrom(null);
   });
-  const cameraRef = useRef(camera);
-  cameraRef.current = camera;
   const boardRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const importRef = useRef<HTMLInputElement>(null);
@@ -309,6 +305,15 @@ export default function Page() {
       setFuture([]);
     },
   );
+  const { camera, cameraRef, setCamera, setZoom, stepZoom, fit, zoomLocked, setZoomLocked } =
+    useBoardCamera({
+      boardRef,
+      drag,
+      nodes: visible,
+      viewKey: JSON.stringify([data.activeCase, scope, query, filter, onlyPins]),
+      enabled: mode !== 'timeline' && !locked && !c.security?.unavailable,
+      loaded,
+    });
   function forgetProtected() {
     const safe = {
       ...dataRef.current,
@@ -629,67 +634,6 @@ export default function Page() {
       }
     } else navigate(n.id);
   };
-  const fit = useCallback(
-    (minimum = 0.2) => {
-      const el = boardRef.current;
-      if (!el) return;
-      const file = dataRef.current.cases.find((x) => x.id === dataRef.current.activeCase)!;
-      const ns = file.nodes.filter((n) => (query ? true : n.parentId === scope) && matches(n));
-      if (!ns.length) {
-        setCamera({ x: 0, y: 0, z: 1 });
-        return;
-      }
-      const topSpace = scope ? 140 : 45;
-      const ids = new Set(ns.map((n) => n.id));
-      const labels = file.threads
-        .filter((t) => t.labelOffset && ids.has(t.source) && ids.has(t.target))
-        .map((t) => threadLayout(t, file.nodes)!);
-      const cards = Array.from(el.querySelectorAll<HTMLElement>('.evidence-card'));
-      const bounds = ns.map((n) => {
-        const card = cards.find((e) => e.dataset.nodeId === n.id),
-          width = card?.offsetWidth || cardSize(n).width,
-          height = card?.offsetHeight || cardSize(n).height,
-          angle = ((n.rotation ?? (n.kind === 'Note' ? -2 : 0)) * Math.PI) / 180,
-          rotatedWidth = Math.abs(width * Math.cos(angle)) + Math.abs(height * Math.sin(angle)),
-          rotatedHeight = Math.abs(height * Math.cos(angle)) + Math.abs(width * Math.sin(angle));
-        return {
-          x: n.x + (width - rotatedWidth) / 2,
-          y: n.y + (height - rotatedHeight) / 2,
-          width: rotatedWidth,
-          height: rotatedHeight,
-        };
-      });
-      const minX = Math.min(...bounds.map((n) => n.x), ...labels.map((l) => l.labelX - 110)),
-        minY = Math.min(...bounds.map((n) => n.y), ...labels.map((l) => l.labelY - 20));
-      const maxX = Math.max(
-          ...bounds.map((n) => n.x + n.width),
-          ...labels.map((l) => l.labelX + 110),
-        ),
-        maxY = Math.max(...bounds.map((n) => n.y + n.height), ...labels.map((l) => l.labelY + 20));
-      const z = Math.min(
-        1.2,
-        Math.max(
-          minimum,
-          Math.min(
-            (el.clientWidth - 100) / (maxX - minX),
-            (el.clientHeight - topSpace - 85) / (maxY - minY),
-          ),
-        ),
-      );
-      setCamera({
-        z,
-        x: (el.clientWidth - (maxX - minX) * z) / 2 - minX * z,
-        y: topSpace - minY * z,
-      });
-    },
-    [scope, query, filter, onlyPins],
-  );
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!drag.current) fit(0.35);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [scope, mode, loaded, data.activeCase, fit]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (
@@ -706,6 +650,7 @@ export default function Page() {
       if ((e.target as HTMLElement)?.closest('input,textarea,[role=dialog],[contenteditable]'))
         return;
       if (e.key === 'Escape') {
+        setBoardExpanded(false);
         if (drag.current) pointerCancel();
         setTool('select');
         setConnectFrom(null);
@@ -730,13 +675,12 @@ export default function Page() {
     return () => window.removeEventListener('keydown', key);
   });
 
-  const { pointerDown, pointerMove, pointerUp, pointerCancel, zoom } = useBoardGestures({
+  const { pointerDown, pointerMove, pointerUp, pointerCancel } = useBoardGestures({
     c,
     tool,
     editable,
     camera,
     cameraRef,
-    boardRef,
     drag,
     dataRef,
     setData,
@@ -850,7 +794,7 @@ export default function Page() {
         position="bottom-right"
         theme={theme === 'midnight' || theme === 'blueprint' ? 'dark' : 'light'}
       />
-      <div className="workspace">
+      <div className={`workspace ${boardExpanded && mode !== 'timeline' ? 'board-expanded' : ''}`}>
         <header className="workbar">
           <button
             className="brand-button"
@@ -1110,10 +1054,6 @@ export default function Page() {
                   onPointerMove={pointerMove}
                   onPointerUp={pointerUp}
                   onPointerCancel={pointerCancel}
-                  onWheel={(e) => {
-                    if (e.ctrlKey || e.metaKey) zoom(e.deltaY > 0 ? 0.93 : 1.07);
-                    else setCamera((v) => ({ ...v, x: v.x - e.deltaX, y: v.y - e.deltaY }));
-                  }}
                 >
                   {scopeNode && (
                     <div className="branch-context">
@@ -1328,19 +1268,16 @@ export default function Page() {
                       </BoardTool>
                     </div>
                   </TooltipProvider>
-                  <div className="zoom">
-                    <button aria-label="Zoom out" onClick={() => zoom(0.85)}>
-                      <Minus size={16} />
-                    </button>
-                    <span>{Math.round(camera.z * 100)}%</span>
-                    <button aria-label="Zoom in" onClick={() => zoom(1.15)}>
-                      <Plus size={16} />
-                    </button>
-                    <span className="divider" />
-                    <button aria-label="Fit board" title="Fit board (F)" onClick={() => fit()}>
-                      <Focus size={17} />
-                    </button>
-                  </div>
+                  <BoardZoom
+                    zoom={camera.z}
+                    locked={zoomLocked}
+                    onZoom={setZoom}
+                    onStep={stepZoom}
+                    onLock={setZoomLocked}
+                    onFit={fit}
+                    expanded={boardExpanded}
+                    onExpand={() => setBoardExpanded((value) => !value)}
+                  />
                   <span className="sr-only" aria-live="polite">
                     {tool === 'connect'
                       ? connectFrom
@@ -2095,6 +2032,13 @@ export default function Page() {
                 evidence and sub-timeline. Click an ancestor to go back. The expand arrow opens a
                 large timeline chart. Each chart card’s sliders menu lets you move it above or below
                 the line and choose Card, Compact, or Note.
+              </p>
+              <p>
+                <strong>Set your board view.</strong> Type a percentage beside the zoom buttons and
+                press Enter (5–400%). The lock switch keeps that percentage through navigation and
+                reopening; you can still pan or centre the board. Unlock to zoom again. Use the
+                expand icon for more room, and Escape to restore the header and timeline. Fit board
+                (F) shows all visible cards when unlocked.
               </p>
               <p>
                 <strong>Read the card colours.</strong> The colour family follows the evidence type.

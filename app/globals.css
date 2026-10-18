@@ -870,21 +870,99 @@ button:hover {
   right: 24px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 3px;
   color: var(--muted-foreground);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
   z-index: 5;
-  background: var(--canvas);
-  padding: 5px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
 }
 .zoom button {
   display: flex;
   align-items: center;
   border: 0;
   background: none;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
   padding: 0;
+  border-radius: 6px;
   color: inherit;
+}
+.zoom button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.zoom button:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--foreground);
+}
+.zoom-value {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding-right: 5px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+}
+.zoom-value:focus-within {
+  background: var(--background);
+  border-color: var(--ring);
+}
+.zoom-value input {
+  width: 44px;
+  padding: 4px 0 4px 3px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  text-align: right;
+  font: inherit;
+  color: var(--foreground);
+  outline: none;
+}
+.zoom-value input:disabled {
+  opacity: 0.8;
+}
+.zoom-lock {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 5px;
+  cursor: pointer;
+}
+.zoom .zoom-lock [data-slot='switch'] {
+  width: 24px;
+  height: 14px;
+  display: inline-flex;
+  justify-content: flex-start;
+  background: var(--input);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+.zoom .zoom-lock [data-slot='switch'][data-state='checked'] {
+  background: var(--primary);
+}
+.zoom-error {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: max-content;
+  max-width: 250px;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+}
+.board-expanded > .workbar,
+.board-expanded .timeline-canopy {
+  display: none;
+}
+.board-expanded > .case-room {
+  margin: 6px;
 }
 .board-hint {
   position: absolute;
@@ -1736,7 +1814,7 @@ button:hover {
     bottom: 7px;
     right: 50%;
     transform: translateX(50%);
-    gap: 12px;
+    gap: 3px;
   }
   .statusbar {
     height: 23px;
@@ -5485,5 +5563,19 @@ button:hover {
   [data-priority='true'].evidence-card,
   [data-priority='true'].stage-card {
     border-width: 2px;
+  }
+}
+
+/* Keep the view controls clear of the tool strip at intermediate window widths too. */
+@media (max-width: 850px) {
+  .canvas-toolbar {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 55px;
+  }
+  .zoom {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 7px;
   }
 }

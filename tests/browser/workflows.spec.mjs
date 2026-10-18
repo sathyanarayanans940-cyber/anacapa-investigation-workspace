@@ -339,7 +339,7 @@ test('each board card resizes at board zoom, saves/reloads, undoes, and keeps ev
   const grip = card.getByRole('button', { name: 'Resize Alex Morgan', exact: true });
   await expect(grip).toBeAttached();
   // Fit has a deferred layout pass; wait for the camera before recording screen movement.
-  await expect(page.locator('.zoom > span').first()).not.toHaveText('100%');
+  await expect(page.getByRole('textbox', { name: 'Zoom percentage' })).not.toHaveValue('100');
   await card.hover();
   const before = await (await page.request.get(appURL + '/api/workspace')).json();
   const initialSize = await card.evaluate((e) => ({
@@ -478,7 +478,7 @@ test('rotated note resizing keeps its anchor and pointer cancellation restores i
   await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
   const card = page.locator('.evidence-card[data-node-id="note"]');
   const grip = card.getByRole('button', { name: /^Resize / });
-  await expect(page.locator('.zoom > span').first()).not.toHaveText('100%');
+  await expect(page.getByRole('textbox', { name: 'Zoom percentage' })).not.toHaveValue('100');
   await card.hover();
   const original = await card.evaluate((e) => ({
     x: parseFloat(e.style.left),

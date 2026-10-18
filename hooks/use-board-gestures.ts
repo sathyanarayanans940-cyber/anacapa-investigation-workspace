@@ -22,7 +22,6 @@ export function useBoardGestures({
   editable,
   camera,
   cameraRef,
-  boardRef,
   drag,
   dataRef,
   setData,
@@ -38,7 +37,6 @@ export function useBoardGestures({
   editable: boolean;
   camera: Camera;
   cameraRef: RefObject<Camera>;
-  boardRef: RefObject<HTMLDivElement | null>;
   drag: RefObject<BoardDrag | null>;
   dataRef: RefObject<Workspace>;
   setData: Dispatch<SetStateAction<Workspace>>;
@@ -172,14 +170,5 @@ export function useBoardGestures({
       dataRef.current = d.before;
     } else setCamera((v) => ({ ...v, x: d.ox, y: d.oy }));
   };
-  const zoom = (factor: number) => {
-    const el = boardRef.current;
-    const cx = (el?.clientWidth || 800) / 2,
-      cy = (el?.clientHeight || 400) / 2;
-    setCamera((v) => {
-      const z = Math.max(0.2, Math.min(2, v.z * factor));
-      return { z, x: cx - ((cx - v.x) * z) / v.z, y: cy - ((cy - v.y) * z) / v.z };
-    });
-  };
-  return { pointerDown, pointerMove, pointerUp, pointerCancel, zoom };
+  return { pointerDown, pointerMove, pointerUp, pointerCancel };
 }
