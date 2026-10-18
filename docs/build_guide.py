@@ -34,7 +34,7 @@ PAGE_COUNT = len(pages) + 1
 PAGE_NUMBERS = {page['id']: number for number, page in enumerate(pages, 2)}
 FIGURES = []
 c=canvas.Canvas(str(OUT),pagesize=A4,pageCompression=1)
-c.setTitle('Anacapa User Guide - 0.4.0');c.setCreator('Anacapa guide builder');c.setAuthor('Anacapa');c.setSubject('An illustrated guide to local investigation boards, nested timelines, and cross-branch relationships')
+c.setTitle('Anacapa User Guide - 0.4.1');c.setCreator('Anacapa guide builder');c.setAuthor('Anacapa');c.setSubject('An illustrated guide to local investigation boards, nested timelines, and cross-branch relationships')
 y=0
 
 def para(text,style='body',width=CW,x=M,gap=9,draw=True):
@@ -47,7 +47,7 @@ def header(number,title):
  global y
  c.setFillColor(PAPER);c.rect(0,0,W,H,fill=1,stroke=0)
  c.setFillColor(ACCENT);c.setFont('Body',9);c.drawString(M,H-33,'anacapa   /   USER GUIDE')
- c.setFillColor(MUTED);c.drawRightString(W-M,H-33,'LOCAL EDITION   0.4.0')
+ c.setFillColor(MUTED);c.drawRightString(W-M,H-33,'LOCAL EDITION   0.4.1')
  c.bookmarkPage('p'+str(number));c.addOutlineEntry(title,'p'+str(number),0,False)
  c.setFillColor(INK);c.setFont('Book',25);c.drawString(M,H-83,title)
  y=H-105
@@ -151,13 +151,13 @@ c.setFillColor(PAPER);c.rect(0,0,W,H,fill=1,stroke=0)
 c.bookmarkPage('p1');c.addOutlineEntry('Anacapa User Guide','p1',0,False)
 icon=ROOT/'public/icons/original-light-512.png'
 c.drawImage(str(icon),M,H-105,47,47,mask='auto')
-c.setFillColor(ACCENT);c.setFont('Body',10);c.drawString(M,H-137,'LOCAL EDITION   /   VERSION 0.4.0   /   OCTOBER 2026')
+c.setFillColor(ACCENT);c.setFont('Body',10);c.drawString(M,H-137,'LOCAL EDITION   /   VERSION 0.4.1   /   OCTOBER 2026')
 c.setFillColor(INK);c.setFont('Book',45);c.drawString(M,H-197,'Anacapa')
 c.setFont('Book',31);c.drawString(M,H-238,'User Guide')
 y=H-267
 para('Build investigation boards, follow nested timelines, and connect evidence across branches.','lede',gap=18)
 figure('cover',maxh=250)
-para('A practical guide to the current workflows, with sharp, real captures of the fictional Harbor Tutorial in Full controls. The new Simple and Review chapters explain version 0.4 additions; earlier screenshots show version 0.3.3.','body',gap=14)
+para('Current controls: click a card to edit; its double-arrow opens sub-events. Updated instructions cover zoom locking and expanded view. Screenshots of the fictional Harbor Tutorial retain version 0.3.3 visuals.','body',gap=14)
 note('What you will learn','Create local case folders, choose security controls, record sources, follow nested timelines, connect evidence across branches, and share or recover an investigation.')
 footer(1);c.showPage()
 # Task-based chapters, with an automatically numbered clickable contents page

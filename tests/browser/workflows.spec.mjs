@@ -171,7 +171,7 @@ test('narrow evidence search, clear, keyboard shortcut, and timeline controls', 
   await search.getByRole('button', { name: 'Show results' }).click();
   await expect(page.locator('.evidence-card')).toHaveCount(1);
   await expect(
-    page.getByRole('button', { name: 'Open Seal photographed', exact: true }),
+    page.getByRole('button', { name: 'Edit Seal photographed', exact: true }),
   ).toBeVisible();
   await page.keyboard.press('Control+k');
   await expect(search).toBeVisible();
@@ -189,19 +189,23 @@ test('narrow evidence search, clear, keyboard shortcut, and timeline controls', 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('nested navigation, pencil editing, autosave, reload, and independent wire styles', async ({
+test('nested navigation, card editing, autosave, reload, and independent wire styles', async ({
   page,
   appURL,
 }) => {
   await page.goto(appURL);
   await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Open The midnight delivery', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
   await expect(
-    page.getByRole('button', { name: 'Open Container unloaded', exact: true }),
+    page.getByRole('button', { name: 'Edit Container unloaded', exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Open Container unloaded', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Open sub-events of Container unloaded', exact: true })
+    .click();
   await expect(
-    page.getByRole('button', { name: 'Open Seal photographed', exact: true }),
+    page.getByRole('button', { name: 'Edit Seal photographed', exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Edit Seal photographed', exact: true }).click();
   await page.getByRole('textbox', { name: 'Name', exact: true }).fill('Seal photograph reviewed');
@@ -251,7 +255,7 @@ test('desktop search, card drag, undo, and switching between pan and select', as
   await search.fill('Seal photographed');
   await expect(page.locator('.evidence-card')).toHaveCount(1);
   await page.getByRole('button', { name: 'Clear search', exact: true }).click();
-  const card = page.getByRole('button', { name: 'Open Alex Morgan', exact: true });
+  const card = page.getByRole('button', { name: 'Edit Alex Morgan', exact: true });
   const box = await card.boundingBox();
   const save = page.waitForResponse(
     (r) => r.url().endsWith('/api/workspace') && r.request().method() === 'PUT',
@@ -281,9 +285,11 @@ test('desktop search, card drag, undo, and switching between pan and select', as
   await page.mouse.up();
   expect(await panCard.count()).toBe(1);
   await page.getByRole('button', { name: 'Select (V)', exact: true }).click();
-  await page.getByRole('button', { name: 'Open The midnight delivery', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
   await expect(
-    page.getByRole('button', { name: 'Open Vehicle enters the gate', exact: true }),
+    page.getByRole('button', { name: 'Edit Vehicle enters the gate', exact: true }),
   ).toBeVisible();
 });
 
@@ -423,7 +429,7 @@ test('each board card resizes at board zoom, saves/reloads, undoes, and keeps ev
   await grip.press('Shift+ArrowRight');
   await grip.dblclick();
   await expect(card).not.toHaveClass(/card-sized/);
-  // Shrink to the limits using the grip. Full notes stay accessible through the pencil.
+  // Shrink to the limits using the grip. Full notes stay accessible by clicking the card body.
   await card.hover();
   const current = await card.evaluate((e) => ({ width: e.offsetWidth, height: e.offsetHeight }));
   const z = await page
@@ -458,7 +464,7 @@ test('each board card resizes at board zoom, saves/reloads, undoes, and keeps ev
     await mkdir('output/card-resize', { recursive: true });
     await page.screenshot({ path: 'output/card-resize/Chrome-Compact-Card.png' });
   }
-  await card.getByRole('button', { name: 'Edit Alex Morgan', exact: true }).click();
+  await card.locator('h2').click();
   await expect(page.getByRole('textbox', { name: 'Notes', exact: true })).toHaveValue(
     resized.summary,
   );
@@ -545,8 +551,10 @@ test('Simple controls resize nested cards and compact cards still open their sub
   ).toBe(true);
   await page.goto(appURL);
   await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Open The midnight delivery', exact: true }).click();
-  const card = page.getByRole('button', { name: 'Open Container unloaded', exact: true });
+  await page
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
+  const card = page.getByRole('button', { name: 'Edit Container unloaded', exact: true });
   const grip = card.getByRole('button', { name: 'Resize Container unloaded', exact: true });
   await grip.focus();
   // Shrink using the keyboard, without depending on the board's current zoom.
@@ -554,9 +562,11 @@ test('Simple controls resize nested cards and compact cards still open their sub
   for (let i = 0; i < 20; i++) await grip.press('Shift+ArrowUp');
   await expect(card).toHaveClass(/card-compact/);
   await expect(card.locator('.card-compact-count')).toHaveText('1');
-  await card.locator('h2').click();
+  await card
+    .getByRole('button', { name: 'Open sub-events of Container unloaded', exact: true })
+    .click();
   await expect(
-    page.getByRole('button', { name: 'Open Seal photographed', exact: true }),
+    page.getByRole('button', { name: 'Edit Seal photographed', exact: true }),
   ).toBeVisible();
   await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
   const after = await (await page.request.get(appURL + '/api/workspace')).json();
@@ -565,6 +575,138 @@ test('Simple controls resize nested cards and compact cards still open their sub
   expect(after.workspace.cases[0].nodes.filter((n) => n.id !== 'unload')).toEqual(
     state.workspace.cases[0].nodes.filter((n) => n.id !== 'unload'),
   );
+});
+
+test('card bodies edit, branch arrows navigate, and keyboard/tool/compact interactions stay separate', async ({
+  page,
+  appURL,
+}) => {
+  await page.goto(appURL);
+  await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
+  const before = (await (await page.request.get(appURL + '/api/workspace')).json()).workspace;
+  const parent = page.locator('.evidence-card[data-node-id="delivery"]');
+  await parent.locator('h2').click();
+  await expect(page.getByRole('dialog', { name: 'Edit evidence', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Name', exact: true })).toHaveValue(
+    'The midnight delivery',
+  );
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await parent.focus();
+  await parent.press('Enter');
+  await expect(page.getByRole('dialog', { name: 'Edit evidence', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await parent
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .press('Enter');
+  await expect(page.locator('.evidence-card[data-node-id="unload"]')).toBeVisible();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  const child = page.locator('.evidence-card[data-node-id="unload"]');
+  const grip = child.getByRole('button', { name: 'Resize Container unloaded', exact: true });
+  await grip.focus();
+  for (let i = 0; i < 16; i++) await grip.press('Shift+ArrowLeft');
+  for (let i = 0; i < 20; i++) await grip.press('Shift+ArrowUp');
+  await expect(child).toHaveClass(/card-compact/);
+  await child.locator('h2').click();
+  await expect(page.getByRole('dialog', { name: 'Edit evidence', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await child
+    .getByRole('button', { name: 'Open sub-events of Container unloaded', exact: true })
+    .click();
+  await expect(
+    page.getByRole('button', { name: 'Edit Seal photographed', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'All evidence', exact: true }).click();
+  await page.getByRole('button', { name: 'Pan (H)', exact: true }).click();
+  await parent.locator('h2').click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Connect evidence (C)', exact: true }).click();
+  await parent.locator('h2').click();
+  await expect(parent).toHaveClass(/connect-selected/);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await page.getByRole('button', { name: 'Select (V)', exact: true }).click();
+  await page.getByRole('button', { name: 'Tilt cards', exact: true }).click();
+  await parent.locator('h2').click();
+  await expect(parent).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
+  const after = (await (await page.request.get(appURL + '/api/workspace')).json()).workspace;
+  for (const node of after.cases[0].nodes) {
+    const prior = before.cases[0].nodes.find((n) => n.id === node.id);
+    const { boardSize, ...rest } = node;
+    expect(rest).toEqual(prior);
+  }
+});
+
+test('timeline chart and list bodies edit while their arrows open nested events', async ({
+  page,
+  appURL,
+}) => {
+  await page.goto(appURL);
+  await expect(page.getByText('All changes saved', { exact: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'Timeline only', exact: true }).click();
+  const chart = page.locator('.stage-card[data-node-id="delivery"]');
+  await chart.getByRole('button', { name: 'Edit The midnight delivery', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'Edit evidence', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await chart
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
+  await expect(
+    page.getByRole('region', { name: 'The midnight delivery timeline', exact: true }),
+  ).toBeVisible();
+  const nested = page.locator('.stage-card[data-node-id="unload"]');
+  await nested.getByRole('button', { name: 'Edit Container unloaded', exact: true }).press('Space');
+  await expect(page.getByRole('dialog', { name: 'Edit evidence', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await page.getByRole('button', { name: 'List', exact: true }).click();
+  const row = page
+    .locator('.timeline-row')
+    .filter({ has: page.getByRole('button', { name: 'Edit The midnight delivery', exact: true }) });
+  await row.getByRole('button', { name: 'Edit The midnight delivery', exact: true }).click();
+  await expect(page.getByRole('dialog', { name: 'Edit evidence', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await row
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
+  await expect(
+    page.getByRole('button', { name: 'Edit Container unloaded', exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+});
+
+test('Viewer card activation shows read-only details and its arrow still navigates', async ({
+  page,
+  appURL,
+}) => {
+  const state = await (await page.request.get(appURL + '/api/workspace')).json();
+  state.workspace.cases[0].security = {
+    managed: true,
+    mode: 'advanced',
+    role: 'viewer',
+    locked: false,
+    operator: 'Fictional viewer',
+  };
+  await page.route('**/api/workspace', async (route) => {
+    if (route.request().method() === 'GET') await route.fulfill({ json: state });
+    else throw new Error('Read-only navigation must not save a workspace');
+  });
+  await page.goto(appURL);
+  await expect(
+    page.getByRole('button', { name: 'View The midnight delivery', exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole('button', { name: 'View The midnight delivery', exact: true })
+    .press('Enter');
+  await expect(page.getByRole('dialog', { name: 'View evidence', exact: true })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Name', exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Save changes', exact: true })).toHaveCount(0);
+  await page.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).last().click();
+  await page
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
+  await expect(
+    page.getByRole('button', { name: 'View Container unloaded', exact: true }),
+  ).toBeVisible();
 });
 
 test('HTML snapshots honour individual board sizes and compact previews without resizing timeline cards', async ({

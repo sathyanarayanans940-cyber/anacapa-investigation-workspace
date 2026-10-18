@@ -16,7 +16,7 @@ pages = [
    ['Header', 'Case files, global search, Case records (shield), Share, Settings, and Add evidence.'],
    ['Top line', 'Open an event or use the expand arrow for a full timeline chart. Ancestor timelines become thin lines inside a branch.'],
    ['Board path', 'Return to All evidence or an ancestor. Relationships reviews links across the whole case.'],
-   ['Cards', 'Click the body to explore inside; use the pencil to edit. Drag in Select mode to move a card.'],
+   ['Cards', 'Click the body to edit; use its double-arrow to open sub-events. Drag in Select mode to move a card.'],
    ['Bottom tools', 'Select, Pan, Connect, Tilt, Add evidence, Add note, Undo, and Redo. The small hint below the tools explains the current action.'],
    ['Lower corners', 'Zoom, Fit board, save status, and Help.']]),
   ('note', ('Check the path first', 'New cards normally go inside the branch you are viewing. Return to All evidence when adding a main case event.'))]),
@@ -51,22 +51,22 @@ pages = [
    ['Advanced at creation', 'Full tools with encryption, local roles, locking, and evidence-change reasons.']]),
   ('steps', [
    'Choose <b>Simple</b> when creating or importing a case. Give it a name, choose its folder, and create it.',
-   'Use <b>Add evidence</b> for a name, type, notes, date, and attachments. Click a card to explore inside; use its pencil to edit.',
+   'Use <b>Add evidence</b> for a name, type, notes, date, and attachments. Click a card to edit; use its double-arrow to open sub-events.',
    'Choose <b>More fields &amp; sources</b> in the card editor to reveal citations, timeline placement, confidence, tags, and colours. Choose Show fewer fields to collapse them again.',
    'The toolbar keeps <b>Select</b>, <b>Pan</b>, <b>Connect</b>, Add evidence, Undo, and Redo. Create a Note through the evidence Type list.',
    'For filters, pins, Tilt, Add note, and the Relationships browser, open <b>Settings > Case controls > Full</b>. Return to Simple at any time.']),
   ('p', 'Changing controls preserves all cards, fields, sources, links, and presentation choices. Simple hides optional tools; it does not remove data. Relationship source sections remain available, and a Viewer can reveal optional card fields without editing them.'),
   ('note', ('Usability does not downgrade protection', 'An Advanced case can use Simple controls from Settings while keeping its encryption, local accounts, locking, and reason requirements. Changing controls never changes the case protection mode. To change protection, create a new folder copy deliberately.'))]),
- dict(id='cards', title='Add and edit a card', lede='Start with a name. Use the pencil for changes and the card body to explore its contents.', figure='custom-type', maxfig=320, caption='Choose Custom type and supply a label such as Interview.', blocks=[
+ dict(id='cards', title='Add and edit a card', lede='Start with a name. Click the card body for changes and its double-arrow to explore inside.', figure='custom-type', maxfig=320, caption='Choose Custom type and supply a label such as Interview.', blocks=[
   ('steps', [
    'Choose <b>Add evidence</b>, press <b>N</b>, or use the toolbar plus. Enter a required <b>Name</b> and choose a <b>Type</b>.',
    'Choose Person, Event, Location, Digital, Document, or Note. <b>Custom type...</b> adds your own category, such as Interview or Transaction.',
    'Write a short summary in <b>Notes</b>. Add a date or optional details when useful, then choose <b>Add evidence</b>.',
-   'Use the existing card\'s <b>pencil</b> to edit it. Choose <b>Save changes</b>. Cancel or close leaves the editor\'s unsaved edits out of the case.']),
-  ('note', ('Keep editing and exploring separate', 'Clicking a card opens its inner evidence board, even if it has no children yet. The small footer plus adds a sub-event. Deleting a card also deletes its descendants and connected threads; review the confirmation. Recent deletion can be undone.'))]),
+   'Click the existing <b>card body</b> to edit it. Choose <b>Save changes</b>. Cancel or close leaves the editor\'s unsaved edits out of the case.']),
+  ('note', ('Keep editing and exploring separate', 'The double-arrow opens the inner board, even if it has no children yet. The small footer plus adds a sub-event. Deleting a card also deletes its descendants and connected threads; review the confirmation. Recent deletion can be undone.'))]),
  dict(id='details', title='Details, titles, and tags', lede='Store each fact as a labelled field so you can read, search, and compare it.', figure='details', maxfig=315, caption='Fields remain separate from the card name and summary.', blocks=[
   ('steps', [
-   'Open the pencil editor and expand <b>Details & attachments</b>. Choose <b>Add field</b> and enter a label and value. The bin beside a field removes it.',
+   'Click the card to open its editor and expand <b>Details & attachments</b>. Choose <b>Add field</b> and enter a label and value. The bin beside a field removes it.',
    'Use separate fields for a phone, address, website, IP, email, or reference. For this exercise, enter <b>Container ID = HBR-2048</b>.',
    'Open <b>Card appearance & labels</b>. <b>Show as the card title</b> chooses Name or one of the field values. The original name remains in the record.',
    'Add comma-separated tags, choose a pin colour, and set Confidence to <b>Confirmed</b>, <b>Likely</b>, or <b>Unverified</b>. Save changes.']),
@@ -95,14 +95,14 @@ pages = [
  dict(id='arrange', title='Arrange the evidence board', lede='Select changes the position of evidence. Pan changes where you are looking.', figure='tilt-controls', maxfig=95, blocks=[
   ('table', [
    ['Control', 'Use it for'],
-   ['Select / V', 'Drag a card or thread label. Click the card body to explore; the pencil edits its details.'],
+   ['Select / V', 'Drag a card or thread label. Click the card body to edit; its double-arrow opens sub-events.'],
    ['Pan / H', 'Drag the board, including over cards, to move the view without moving evidence.'],
    ['Tilt', 'Select the rotation tool, choose a card, and use the arrows for one-degree steps. Reset straightens it. The limit is 15 degrees each way.'],
-   ['Zoom / Fit / F', 'Plus and minus change zoom. Fit includes the visible cards, images, tilt, and moved labels.'],
+   ['Zoom / Fit / F', 'Type 5-400% and press Enter, or use +/-. Lock keeps that scale; Fit (F) shows visible cards and labels when unlocked.'],
    ['Add note', 'Creates a Note for an observation or question. Notes can also have fields, attachments, and children.'],
    ['Undo / Redo', 'Recovers up to 40 recent actions in this session. Reloading clears this temporary action history.']]),
-  ('p', 'New cards look for free space. Existing manual positions stay yours to arrange. Fit is useful after adding cards or clearing a filter. Presentation changes travel with an editable investigation.'),
-  ('note', ('Pins mark focus', 'Pin this evidence in Card appearance & labels marks a key card. The pin beside the view controls filters to pinned cards. A pin does not prevent dragging.'))]),
+  ('p', 'New cards look for free space. Existing positions stay yours to arrange. Lock zoom keeps the scale through navigation and reopening; you can still pan. The expand icon hides the header and ribbon; Escape restores them. Resize a card with its corner grip. Presentation choices travel with editable files.'),
+  ('note', ('Pins mark focus', 'Pin as priority in Card appearance & labels marks a key card. The pin beside the view controls filters to pinned cards. A pin does not prevent dragging.'))]),
  dict(id='threads', title='Draw and label relationships', lede='Name the connection so it reads clearly from the source card to the target card.', figure='new-relationship', maxfig=330, blocks=[
   ('steps', [
    'Choose <b>Connect</b> or press <b>C</b>. Click the first card, then the second visible card.',
@@ -114,16 +114,16 @@ pages = [
  dict(id='nested', title='Build nested sub-timelines', lede='Every card can contain its own evidence and timeline. Repeat the same pattern as deeply as your case needs.', diagram='hierarchy', blocks=[
   ('steps', [
    'Use the small <b>plus</b> in the card footer. The editor identifies <b>Sub-event inside</b>. Save to create that child.',
-   'Click the parent card body. Its inner board shows the child cards and their timeline. For an empty branch, choose <b>Add sub-event</b>.',
+   'Click the parent card\'s double-arrow. Its inner board shows the child cards and their timeline. For an empty branch, choose <b>Add sub-event</b>.',
    'Repeat on a child to create another level. The previous timelines become thin lines with circles, leaving room for the active branch.',
-   'Use the breadcrumb or a ribbon\'s close button to go back. The pencil editor\'s <b>Sub-timeline</b> section also provides <b>Add sub-event</b> and <b>Open</b>.']),
+   'Use the breadcrumb or a ribbon\'s close button to go back. The card editor\'s <b>Sub-timeline</b> section also provides <b>Add sub-event</b> and <b>Open</b>.']),
   ('note', ('One parent for each card', 'Timeline placement > Inside changes the parent or returns a card to Main case timeline. A card cannot be placed inside itself or a descendant. Reparenting keeps its own child branch and saved relationships.'))]),
  dict(id='timeline', title='Bring the timeline centre stage', lede='Use time as the main workspace, then return to the evidence board whenever you need it.', figure='timeline-nested', maxfig=310, caption='A parent lane collapses while the Container unloaded sub-timeline opens beneath it.', blocks=[
   ('steps', [
    'Choose <b>Timeline only</b>, or use the expand arrow on a ribbon. The other view buttons are <b>Board and timeline</b> and <b>Board only</b>.',
    'Choose <b>Chart</b> or <b>List</b>. Chart alternates cards above and below the line; List helps read longer summaries and expand child rows.',
    'Use each chart card\'s <b>sliders</b> to choose Above line or Below line, and Card, Compact, or Note. This arrangement does not change the date.',
-   'Click a chart card with children to open its nested lane. The parent becomes a labelled line; <b>Expand parent timeline</b> restores it. Use <b>Board</b> to enter a card\'s inner board or <b>Back to board</b> to return.']),
+   'Click a chart card to edit it; use its double-arrow to open the nested lane. The parent becomes a labelled line; <b>Expand parent timeline</b> restores it. Use <b>Board</b> to enter a card\'s inner board or <b>Back to board</b> to return.']),
   ('note', ('The arrangements stay independent', 'Board positions and tilt are separate from chart side and style. The chart still sorts by date. Use lane arrows or horizontal scrolling for later events. These presentation choices are saved in the editable file.'))]),
  dict(id='cross', title='Connect different sub-timelines', lede='Choose any two cards in the same case, even when they live many levels apart.', figure='new-relationship', maxfig=330, caption='The branch paths distinguish the two endpoints.', blocks=[
   ('steps', [
@@ -145,7 +145,7 @@ pages = [
   ('steps', [
    'After saving the gate-to-seal link, open either endpoint\'s parent branch. Its card shows a <b>1 link</b> badge.',
    'Click the badge to open Relationships focused on that card. <b>Focus relationships</b> chooses another card; <b>Entire case</b> returns to every saved link.',
-   'Select an endpoint name to reveal its board and breadcrumb. Its pencil opens the evidence editor.',
+   'Select an endpoint name to reveal its board and breadcrumb. Click its body to open the evidence editor.',
    'The relationship pencil changes the label, colour, uncertainty, sources, or endpoints. Changing an endpoint clears the old manual label offset. Save changes.']),
   ('p', 'The board draws a thread only when both endpoints are visible together. Relationships remains available for links spanning branches or hidden by filters; it reviews the case regardless of the current board filter.'),
   ('note', ('Review the link as well as the card', 'Confirmed evidence can still have an uncertain relationship. Saving a suggestion moves that pair into Saved links and removes it from Shared details.'))]),

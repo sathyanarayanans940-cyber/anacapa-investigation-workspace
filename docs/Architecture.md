@@ -27,6 +27,8 @@ Anacapa is a local web app. React renders the workspace; a loopback-only Node se
 
 ## Editing and saving
 
+In Select, activating a card body opens its editor; the double-arrow opens its sub-events. The same distinction applies to timeline chart and list cards. Keyboard activation uses the same actions. Connect, Tilt, Pan, dragging, and resizing keep their own behavior. A Viewer sees read-only details. Exported HTML remains a read-only viewer.
+
 The editor holds a draft until Save. Applying an edit validates the workspace and records an undo boundary. Advanced cases require a reason for material evidence changes. Position, board size, colour, wire shape, and label offsets are layout changes. Dashed uncertainty remains a material relationship property.
 
 `lib/card-size.ts` owns bounded resize geometry, preview density, and wire anchors. Optional `Evidence.boardSize` preserves old automatic layouts, while explicit sizes are validated at 160–720 px wide and 100–640 px tall. Pointer movement is converted through board zoom and card rotation; adjusting position keeps the opposite corner fixed. A completed drag creates one undo entry, and cancellation restores its starting state. Compact previews hide content rather than modifying evidence. Editable packages and shared HTML retain board dimensions; timeline layouts remain separate.

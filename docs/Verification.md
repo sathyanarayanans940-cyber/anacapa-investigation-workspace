@@ -50,7 +50,8 @@ Any loopback port can be passed; `ANACAPA_BASE_URL` is another option. This chec
 The suite verifies:
 
 - Mobile search, clear, Ctrl K, named timeline controls, Chart/List, and returning to the board.
-- Nested navigation, pencil editing, autosave, reload, and per-wire style/colour persistence without changing other wires.
+- Nested navigation, card-body editing, arrow navigation, autosave, reload, and per-wire style/colour persistence without changing other wires.
+- Card-body editing and double-arrow sub-event navigation in board, compact, chart, and list views, including keyboard activation and read-only details. Opening either control must preserve case content; Connect/Tilt/Pan remain independent.
 - Desktop search, dragging a card, Undo, and switching Pan/Select with current handlers.
 - Per-card resizing at board zoom, fixed opposite corners on rotated notes, cancellation, keyboard adjustments, size limits, automatic reset, Undo/Redo, and save/reload. Compact cards retain full notes in the editor, nested cards resize with Simple controls, and HTML snapshots keep individual board sizes without applying them to timeline cards. Model/API checks cover bounded dimensions, layout-only edits in Advanced mode, placement, wire anchors, and editable package round-trips.
 - Board zoom: exact/invalid/bounded input, rapid clicks, stable anchors, cancellation of a delayed fit, pinch handling, persistent zoom lock, navigation/search/timeline/reload, continued panning, expanded view, and non-overlapping controls from 320 to 1280 px. Camera geometry and corrupt preference recovery have separate Node tests.

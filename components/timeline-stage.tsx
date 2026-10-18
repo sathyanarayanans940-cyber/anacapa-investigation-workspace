@@ -16,7 +16,7 @@ import {
   StickyNote,
   PanelTop,
   AlignLeft,
-  Pencil,
+  ChevronsRight,
 } from 'lucide-react';
 import { type Evidence, titleOf } from '@/lib/case-data';
 import { timelinePresentation } from '@/lib/timeline-layout';
@@ -32,6 +32,7 @@ type Props = {
   onAdd: (parent: string | null) => void;
   onArrange: (id: string, patch: Pick<Partial<Evidence>, 'timelineSide' | 'timelineStyle'>) => void;
   flat?: boolean;
+  readOnly?: boolean;
 };
 const dateLabel = (date: string) =>
   wallDateLabel(date, { month: 'short', day: 'numeric', year: 'numeric' });
@@ -53,6 +54,7 @@ function TimelineLane({
   onAdd,
   onArrange,
   flat = false,
+  readOnly = false,
   nested = false,
 }: Props & { nested?: boolean }) {
   const track = useRef<HTMLDivElement>(null);
@@ -177,12 +179,16 @@ function TimelineLane({
                     </span>
                     <div className="stage-card-tools">
                       <button
-                        className="stage-edit"
-                        aria-label={`Edit ${title}`}
-                        title="Edit details"
-                        onClick={() => onEdit(n)}
+                        className="stage-explore"
+                        aria-label={`Open sub-events of ${title}`}
+                        title="Open sub-events"
+                        onClick={() => {
+                          if (children && !flat) {
+                            if (!open) onToggle(n.id);
+                          } else onBoard(n.id);
+                        }}
                       >
-                        <Pencil size={12} />
+                        <ChevronsRight size={14} />
                       </button>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -244,12 +250,8 @@ function TimelineLane({
                   </div>
                   <button
                     className="stage-card-content"
-                    onClick={() => {
-                      if (children && !flat) {
-                        if (!open) onToggle(n.id);
-                      } else onBoard(n.id);
-                    }}
-                    aria-label={`Open ${title}`}
+                    onClick={() => onEdit(n)}
+                    aria-label={`${readOnly ? 'View' : 'Edit'} ${title}`}
                   >
                     <h2>{title}</h2>
                     <p>{n.summary || 'No description yet.'}</p>
@@ -316,6 +318,7 @@ function TimelineLane({
         <div className="stage-nested" key={n.id}>
           <TimelineLane
             nested
+            readOnly={readOnly}
             nodes={nodes}
             parent={n}
             expanded={expanded}

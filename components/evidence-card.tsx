@@ -3,7 +3,7 @@ import { wallDateLabel as dateLabel } from '@/lib/local-date';
 import { titleOf, type Evidence } from '@/lib/case-data';
 import { compactCard, cardPreviewLines, cardPreviewText, type CardSize } from '@/lib/card-size';
 import { cardTypeTone } from '@/lib/card-type-tone';
-import { Pin, Pencil, Link2, ChevronRight, Plus } from 'lucide-react';
+import { Pin, ChevronsRight, Link2, ChevronRight, Plus } from 'lucide-react';
 export const visualColor = (color: string) =>
   ({
     '#6960d9': '#a58b70',
@@ -22,8 +22,8 @@ export function Card({
   onDown,
   onMove,
   onUp,
-  onOpen,
-  onEdit,
+  onActivate,
+  readOnly,
   onExplore,
   onAddChild,
   resizable,
@@ -42,8 +42,8 @@ export function Card({
   onDown: (e: React.PointerEvent) => void;
   onMove: (e: React.PointerEvent) => void;
   onUp: (e: React.PointerEvent) => void;
-  onOpen: () => void;
-  onEdit: () => void;
+  onActivate: () => void;
+  readOnly: boolean;
   onExplore: () => void;
   onAddChild: () => void;
   resizable: boolean;
@@ -70,14 +70,14 @@ export function Card({
       data-type={tone.type}
       data-priority={n.pinned}
       tabIndex={0}
-      aria-label={`${interaction === 'tilt' ? 'Tilt' : interaction === 'pan' ? 'Pan board over' : 'Open'} ${titleOf(n)}`}
-      aria-description={`${n.confidence} confidence.${n.pinned ? ' Priority card.' : ''} Click to explore inside. Drag to move. Use the pencil to edit.${resizable ? ' Drag the lower-right corner to resize.' : ''}`}
+      aria-label={`${interaction === 'tilt' ? 'Tilt' : interaction === 'pan' ? 'Pan board over' : interaction === 'connect' ? 'Connect' : readOnly ? 'View' : 'Edit'} ${titleOf(n)}`}
+      aria-description={`${n.confidence} confidence.${n.pinned ? ' Priority card.' : ''} ${readOnly ? 'Click to view details.' : 'Click to edit details. Drag to move.'} Use the arrow to open sub-events.${resizable ? ' Drag the lower-right corner to resize.' : ''}`}
       aria-pressed={interaction === 'tilt' ? selected : undefined}
       onKeyDown={(e) => {
         if (e.target !== e.currentTarget) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onOpen();
+          onActivate();
         }
       }}
       onPointerDown={onDown}
@@ -127,17 +127,17 @@ export function Card({
             <span className="card-id">{n.date ? dateLabel(n.date) : 'Undated'}</span>
           )}
           <button
-            className="card-edit"
-            aria-label={`Edit ${titleOf(n)}`}
-            title="Edit details"
+            className="card-explore"
+            aria-label={`Open sub-events of ${titleOf(n)}`}
+            title={count ? `Open ${count} sub-events` : 'Open inside this card'}
             onPointerDown={(e) => e.stopPropagation()}
             onPointerUp={(e) => e.stopPropagation()}
             onClick={(e) => {
               e.stopPropagation();
-              onEdit();
+              onExplore();
             }}
           >
-            <Pencil size={12} />
+            <ChevronsRight size={14} />
           </button>
         </span>
       </div>

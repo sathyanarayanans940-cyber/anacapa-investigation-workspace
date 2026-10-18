@@ -126,7 +126,9 @@ test('locked zoom survives branches, filters, timeline, resize, fit, and reopeni
   await page
     .getByRole('textbox', { name: 'Find evidence', exact: true })
     .fill('The midnight delivery');
-  await page.getByRole('button', { name: 'Open The midnight delivery', exact: true }).click();
+  await page
+    .getByRole('button', { name: 'Open sub-events of The midnight delivery', exact: true })
+    .click();
   await expect(
     page.getByRole('heading', { name: 'The midnight delivery', exact: true }),
   ).toBeVisible();

@@ -64,8 +64,8 @@ export const BoardContents = memo(function BoardContents({
           onDown={(e) => actions.onNodeDown(e, n.id)}
           onMove={actions.pointerMove}
           onUp={(e) => actions.onNodeUp(e, n)}
-          onOpen={() => actions.onNodeOpen(n)}
-          onEdit={() => actions.onNodeEdit(n)}
+          onActivate={() => actions.onNodeActivate(n)}
+          readOnly={!editable}
           onExplore={() => actions.onNodeExplore(n)}
           onAddChild={() => actions.onNodeAddChild(n.id)}
           resizable={editable && tool === 'select'}

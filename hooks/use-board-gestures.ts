@@ -28,7 +28,6 @@ export function useBoardGestures({
   setCamera,
   setHistory,
   setFuture,
-  navigate,
   selectNode,
   setThread,
 }: {
@@ -43,7 +42,6 @@ export function useBoardGestures({
   setCamera: Dispatch<SetStateAction<Camera>>;
   setHistory: Dispatch<SetStateAction<Workspace[]>>;
   setFuture: Dispatch<SetStateAction<Workspace[]>>;
-  navigate: (id: string | null) => void;
   selectNode: (node: Evidence) => void;
   setThread: Dispatch<SetStateAction<Thread | null>>;
 }) {
@@ -59,7 +57,7 @@ export function useBoardGestures({
     if (id && !editable) {
       if (kind === 'node') {
         const node = c.nodes.find((n) => n.id === id);
-        if (node) navigate(node.id);
+        if (node) selectNode(node);
       }
       return;
     }

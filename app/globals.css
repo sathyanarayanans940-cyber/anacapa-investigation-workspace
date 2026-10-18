@@ -3563,7 +3563,8 @@ button:hover {
   gap: 8px;
   flex-shrink: 0;
 }
-.card-edit {
+.card-edit,
+.card-explore {
   width: 24px;
   height: 24px;
   display: grid;
@@ -3575,7 +3576,8 @@ button:hover {
   color: var(--muted-foreground);
   cursor: pointer;
 }
-.card-edit:hover {
+.card-edit:hover,
+.card-explore:hover {
   border-color: var(--primary);
   color: var(--primary);
   background: var(--accent);
@@ -3681,7 +3683,8 @@ button:hover {
   margin: 5px 0;
   overflow-wrap: anywhere;
 }
-.branch-heading .card-edit {
+.branch-heading .card-edit,
+.card-explore {
   flex-shrink: 0;
 }
 .branch-context p {
@@ -3718,7 +3721,8 @@ button:hover {
   align-items: center;
   flex-shrink: 0;
 }
-.stage-edit {
+.stage-edit,
+.stage-explore {
   width: 25px;
   height: 25px;
   display: grid;
@@ -3729,7 +3733,8 @@ button:hover {
   color: var(--muted-foreground);
   padding: 0;
 }
-.stage-edit:hover {
+.stage-edit:hover,
+.stage-explore:hover {
   background: var(--accent);
   border-color: var(--primary);
   color: var(--primary);
@@ -3768,7 +3773,9 @@ button:hover {
     font-size: 19px;
   }
   .card-edit,
-  .stage-edit {
+  .card-explore,
+  .stage-edit,
+  .stage-explore {
     min-width: 26px;
     min-height: 26px;
   }

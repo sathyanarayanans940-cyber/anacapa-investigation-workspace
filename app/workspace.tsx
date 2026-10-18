@@ -22,6 +22,7 @@ import {
   Clock3,
   Plus,
   ChevronRight,
+  ChevronsRight,
   Pin,
   SlidersHorizontal,
   Layers,
@@ -632,7 +633,7 @@ export default function Page() {
         });
         setConnectFrom(null);
       }
-    } else navigate(n.id);
+    } else setEditing(clone(n));
   };
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -687,7 +688,6 @@ export default function Page() {
     setCamera,
     setHistory,
     setFuture,
-    navigate,
     selectNode,
     setThread,
   });
@@ -702,12 +702,8 @@ export default function Page() {
       if (tool === 'connect' || tool === 'tilt') selectNode(node);
       else pointerUp(e);
     },
-    onNodeOpen: selectNode,
-    onNodeEdit: (n) => setEditing(clone(n)),
-    onNodeExplore: (n) => {
-      if (tool === 'select') navigate(n.id);
-      else selectNode(n);
-    },
+    onNodeActivate: selectNode,
+    onNodeExplore: (n) => navigate(n.id),
     onNodeAddChild: (id) => newNode('Event', id, true),
     onThreadEdit: (t) => setThread(clone(t)),
     pointerDown,
@@ -1200,7 +1196,7 @@ export default function Page() {
                           id: 'select',
                           icon: MousePointer2,
                           label: 'Select (V)',
-                          help: 'Select · drag cards to move, drag their lower-right corner to resize. Click to explore; pencil to edit.',
+                          help: 'Select · click a card to edit, use its arrow to open sub-events. Drag to move or resize from the corner.',
                         },
                         {
                           id: 'pan',
@@ -1330,6 +1326,7 @@ export default function Page() {
                   {timelineView === 'chart' ? (
                     <TimelineStage
                       flat={focusedTimeline}
+                      readOnly={!editable}
                       nodes={focusedTimeline ? timelineMatches : c.nodes}
                       parent={scopeNode ?? null}
                       expanded={expanded}
@@ -1374,14 +1371,8 @@ export default function Page() {
                               <div className="row-main">
                                 <button
                                   className="row-open"
-                                  aria-label={`Open ${titleOf(n)}`}
-                                  onClick={() => {
-                                    if (children) setExpanded((v) => new Set([...v, n.id]));
-                                    else {
-                                      navigate(n.id);
-                                      setMode('split');
-                                    }
-                                  }}
+                                  aria-label={`${editable ? 'Edit' : 'View'} ${titleOf(n)}`}
+                                  onClick={() => setEditing(clone(n))}
                                 >
                                   <span className="subtle">
                                     {n.customKind || n.kind} · {n.confidence}
@@ -1390,12 +1381,18 @@ export default function Page() {
                                   <p>{n.summary}</p>
                                 </button>
                                 <button
-                                  className="card-edit row-edit"
-                                  aria-label={`Edit ${titleOf(n)}`}
-                                  title="Edit details"
-                                  onClick={() => setEditing(clone(n))}
+                                  className="card-explore row-edit"
+                                  aria-label={`Open sub-events of ${titleOf(n)}`}
+                                  title="Open sub-events"
+                                  onClick={() => {
+                                    if (children) setExpanded((v) => new Set([...v, n.id]));
+                                    else {
+                                      navigate(n.id);
+                                      setMode('split');
+                                    }
+                                  }}
                                 >
-                                  <Pencil size={13} />
+                                  <ChevronsRight size={14} />
                                 </button>
                                 <div className="row-actions">
                                   {children > 0 && (
@@ -2026,12 +2023,12 @@ export default function Page() {
                 included in editable files and new HTML snapshots.
               </p>
               <p>
-                <strong>3. Follow the timeline.</strong> Click a card to open its sub-events and
-                evidence. Use the pencil beside its date to edit details. The small plus in a card’s
-                footer adds a sub-event inside it. Click an event on the top line to open its
-                evidence and sub-timeline. Click an ancestor to go back. The expand arrow opens a
-                large timeline chart. Each chart card’s sliders menu lets you move it above or below
-                the line and choose Card, Compact, or Note.
+                <strong>3. Follow the timeline.</strong> Click a card to edit its details. Use the
+                double-arrow beside its date to open its sub-events and evidence. The small plus in
+                a card’s footer adds a sub-event inside it. Click an event on the top line to open
+                its evidence and sub-timeline. Click an ancestor to go back. The expand arrow opens
+                a large timeline chart. Each chart card’s sliders menu lets you move it above or
+                below the line and choose Card, Compact, or Note.
               </p>
               <p>
                 <strong>Set your board view.</strong> Type a percentage beside the zoom buttons and
@@ -2043,7 +2040,7 @@ export default function Page() {
               <p>
                 <strong>Read the card colours.</strong> The colour family follows the evidence type.
                 Custom types get a consistent colour from their name. Shade strength shows
-                Unverified, Likely, or Confirmed confidence. Open the pencil, then Card appearance &
+                Unverified, Likely, or Confirmed confidence. Click the card, then Card appearance &
                 labels to change Confidence. Pin as priority adds emphasis at any confidence level.
                 Colours follow the current palette and carry into new HTML snapshots.
               </p>
@@ -2056,7 +2053,7 @@ export default function Page() {
                 <summary>More tools & shortcuts</summary>
                 <p>
                   Add phone numbers, links, addresses, IPs, files, or any custom fields under
-                  Details & attachments. Use the pencil to edit a card. Card appearance lets you
+                  Details & attachments. Click the card body to edit it. Card appearance lets you
                   choose a field as the title, pin the card, or add tags. Tilt rotates a card
                   deliberately. Undo/redo restores recent changes.
                 </p>
