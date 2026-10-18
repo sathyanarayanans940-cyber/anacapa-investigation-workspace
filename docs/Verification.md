@@ -29,7 +29,7 @@ To test the installed Google Chrome with a disposable browser profile, set `ANAC
 ANACAPA_BROWSER_CHANNEL=chrome npm run validate
 ```
 
-Chrome must already be installed. CI continues to use its downloaded Chromium. Neither option changes the user's Chrome profile or PWA installation. Native scrollbar rendering is enabled in the browser tests rather than hidden by the headless launch flag.
+Chrome must already be installed. CI uses its downloaded Chromium. Tests use disposable profiles and leave existing browser profiles and PWA installations untouched. Native scrollbar rendering is enabled in the browser tests.
 
 Node tests rebuild the runtime model first. Browser tests require a production build. Each browser workflow starts a disposable server on an OS-assigned loopback port, with fictional data and temporary case folders. They do not reuse port 5173 or the user's workspace. Failure screenshots, traces, and the browser report are ignored by Git.
 
@@ -64,6 +64,6 @@ Playwright configuration and locators follow its [official test documentation](h
 
 ## CI and limits
 
-`.github/workflows/verify.yml` configures clean-install formatting, TypeScript, Node tests, production build, and Chromium browser tests on Windows and Linux. Configuration is not a passing hosted run: confirm the actual GitHub Actions result after uploading. Failed browser artifacts are retained for inspection.
+`.github/workflows/verify.yml` runs clean-install formatting, TypeScript, Node tests, the production build, and Chromium browser tests on Windows and Linux. [GitHub Actions](https://github.com/sathyanarayanans940-cyber/anacapa-investigation-workspace/actions/workflows/verify.yml) shows the result for each commit. Failed browser artifacts are retained for inspection.
 
-These are developer regression checks, not proof of zero bugs. Full keyboard/screen-reader review, browser/OS PWA installation, other browser engines, low-end hardware, independent security review, and operational agency approval are separate work. Existing older manual QA results are historical and must not be presented as fresh tests of this source.
+Coverage does not yet include a full keyboard/screen-reader review, browser/OS PWA installation, other browser engines, or low-end hardware. Independent security review and operational approval remain outside this suite. Older manual QA reports identify the versions they tested.

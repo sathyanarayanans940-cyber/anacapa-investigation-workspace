@@ -25,11 +25,11 @@ Each shape runs five actual editor-open, title-change, autosave, and reload cycl
 
 ## What these results mean
 
-Nested boards keep the displayed scene smaller even as case data grows. A 3,000-card case with 100 main-board cards had an editor-open p95 of 107.84 ms here. A flat 3,000-card board remains slow, with editor-open p95 of 1907.57 ms. Do not present the schema ceiling as a guarantee of fluid interaction.
+Nested boards keep the displayed scene smaller even as case data grows. A 3,000-card case with 100 main-board cards had an editor-open p95 of 107.84 ms here. A flat 3,000-card board remains slow, with editor-open p95 of 1907.57 ms. The schema limit is higher than the number of cards that can be displayed smoothly on a single board.
 
 Endpoint and child indexes remove repeated full-case lookups. Memoized scene content skips unrelated dialog/camera updates. Closed select menus now wait until opened to mount their options. The diagram still creates ordinary DOM/SVG elements; it is **not virtualized**. Full workspace validation, serialization, cloning, and revision copies also remain.
 
-For actual investigations, keep the main board focused on key events and organize detail in nested timelines. On phones, Timeline → List provides a readable chronological route. Full-board virtualization, more compact history storage, and tests on slower Windows/macOS hardware are future scale work. The measured architecture and limits are appropriate to describe in a portfolio; unrestricted enterprise-scale claims are not supported.
+For larger cases, keep the main board focused on key events and organize detail in nested timelines. On phones, Timeline → List provides a readable chronological view. Full-board virtualization, more compact history storage, and tests on slower Windows/macOS hardware remain future work.
 
 ## Storage growth
 
@@ -52,4 +52,4 @@ npx playwright install chromium
 npm run benchmark
 ```
 
-Set `ANACAPA_BENCH_SIZES` to a comma-separated list (for example `100,500`) for a shorter run. It creates disposable cases in the OS temporary directory, uses an OS-assigned loopback port, and removes those cases afterwards. It does not touch the live workspace or change port 5173. Compare like hardware, browser, viewport, and workload; keep the host details alongside any timing claim.
+Set `ANACAPA_BENCH_SIZES` to a comma-separated list (for example `100,500`) for a shorter run. It creates disposable cases in the OS temporary directory, uses an OS-assigned loopback port, and removes those cases afterwards. It does not touch the live workspace or change port 5173. Compare results from the same hardware, browser, viewport, and workload, and include those details with reported timings.

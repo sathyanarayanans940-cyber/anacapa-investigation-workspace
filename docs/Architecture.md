@@ -47,6 +47,6 @@ The experimental `desktop/` prototype is separate from the web app and is not in
 
 ## Current design limits
 
-The scene uses ordinary DOM/SVG and is not virtualized. Indexed endpoints and child counts avoid repeated full-case scans; memoization skips unrelated scene updates. A maximum-size flat board still creates many elements. Workspace saves and undo use full copies, and saved history uses full snapshots. See the performance measurements before making scale or hardware claims.
+The scene uses ordinary DOM/SVG and is not virtualized. Indexed endpoints and child counts avoid repeated full-case scans; memoization skips unrelated scene updates. A maximum-size flat board still creates many elements. Workspace saves and undo use full copies, and saved history uses full snapshots. [Performance measurements](Performance.md) record the tested workloads, hardware, and current limits.
 
 Advanced protection does not establish independent forensic validation or agency approval. See the README and release validation report for the security boundary.

@@ -1,6 +1,6 @@
 # Anacapa 0.3.1 feature check
 
-Checked on 10 October 2026 on macOS, in the Codex browser and the installed Brave PWA. Browser changes used fictional investigations in a separate temporary registry and case folders. The user's investigation was not edited.
+Checked on 10 October 2026 on macOS using the Codex browser and an installed Brave PWA. Test cases were fictional and used a temporary registry and separate case folders.
 
 ## Bugs reproduced and fixed
 
@@ -53,18 +53,16 @@ Local account creation/revocation and simulated session expiry were checked by a
 
 This pass does not verify Windows/Linux launchers, physical printing, instant changes to OS-managed installed-app icons, or maximum-size investigations. It is a functional regression pass, not an independent security audit or agency certification.
 
-The temporary practice registry and browser tabs were removed after the pass. The main local server was left running.
-
 ## Settings and editor styling follow-up
 
 The settings window now uses the palette's input border instead of inheriting the text colour. The editor footer uses a 59 px row, an inset divider, compact 34 px controls, Cancel beside Save, and a subdued Delete action.
 
-Checked in a separate fictional registry: settings border colours matched Dusk and Linen; Save persisted an edit; Cancel discarded a changed draft; Delete opened its existing confirmation; Add evidence created an item. At 390 × 600, both new-evidence actions stayed inside the dialog, the footer stayed visible at 587 px, and the form still scrolled. Typecheck and production packaging passed. The user's open evidence draft was left untouched.
+Checked in a separate fictional registry: settings border colours matched Dusk and Linen; Save persisted an edit; Cancel discarded a changed draft; Delete opened its existing confirmation; Add evidence created an item. At 390 × 600, both new-evidence actions stayed inside the dialog, the footer stayed visible at 587 px, and the form still scrolled. Typecheck and production packaging passed.
 
 
 ## Fresh audit — 11 October 2026, version 0.3.2
 
-All work used fictional practice cases in an isolated local registry. The user's investigation was not edited.
+All checks used fictional practice cases in an isolated local registry.
 
 ### Issues found and fixed
 
@@ -94,13 +92,13 @@ All work used fictional practice cases in an isolated local registry. The user's
 
 `npm test`: **50 passed, 0 failed**. `npm run typecheck`: **passed**. Production build/package and whitespace checks passed. Tests include expired/revoked accounts, encrypted originals, corrupt snapshots, stale writes, missing/moved folders, sharing redactions, strict dates and restore reasons.
 
-The requested responsive viewport override was not reflected by this browser provider, so this audit does not claim a fresh 390 px viewport check. The earlier responsive audit remains recorded above. Windows/Linux launchers, physical printing, maximum-size cases, OS-managed PWA icon refresh and a ten-real-minute idle wait remain outside this pass. This is functional regression testing, not an independent security certification.
+The browser did not apply the requested viewport override, so this pass did not verify a 390 px layout. The earlier responsive audit remains recorded above. Windows/Linux launchers, physical printing, maximum-size cases, OS-managed PWA icon refresh and a ten-real-minute idle wait remain outside this pass. This is functional regression testing, not an independent security certification.
 
 Proof images: `output/qa/editor-scroll-fixed.png`, `output/qa/html-timeline-fixed.png`, and `output/qa/save-conflict-recovery.png`.
 
 ## Windows and boundary audit — 11 October 2026, version 0.3.3
 
-Used only the authorized Parallels VM **Windows 11 - Main**, Windows 11 ARM64, with its existing Node.js 24.14.0 and Chrome. All guest investigations and downloads were fictional, under a dedicated temporary QA directory. The user's real investigation was not edited. VM networking and host folder sharing were left unchanged.
+Checked in a Windows 11 ARM64 Parallels VM with Node.js 24.14.0 and Chrome. Fictional cases and downloads were stored in a dedicated temporary QA directory.
 
 ### Issues fixed
 
@@ -112,7 +110,7 @@ Used only the authorized Parallels VM **Windows 11 - Main**, Windows 11 ARM64, w
 - Export names such as `CON` are reserved Windows device names. Downloads now use safe names such as `Case-CON.anacapa`; trailing dots/spaces and other reserved names are handled too. Attachment download headers correctly encode apostrophes and Unicode.
 - Evidence validation now keeps invalid drafts open, enforces the 3,000-card limit before creation, and checks attachment counts before uploading. HTML reports are built when requested instead of during initial board loading.
 - Windows startup now checks the supported Node version, handles working directories with spaces, preserves failures, and disables inherited delayed expansion to protect paths containing `!`.
-- New cards previously reused the same position and could cover existing evidence. They now find a free gap using measured sibling card sizes when available, account for rotation, and keep existing manual positions. New-card sizing is checked again when saving. A regression test covers tall cards, rotated cards, populated boards and empty branches. The final placement change passed the suite on both platforms; a fresh physical UI check of this last change could not complete after computer-use access became unavailable.
+- New cards previously reused the same position and could cover existing evidence. They now find a free gap using measured sibling card sizes when available, account for rotation, and keep existing manual positions. New-card sizing is checked again when saving. A regression test covers tall cards, rotated cards, populated boards and empty branches. The final placement change passed the suite on both platforms; the final placement change did not receive a separate UI check.
 
 ### Windows UI workflows observed
 
@@ -128,12 +126,12 @@ Used only the authorized Parallels VM **Windows 11 - Main**, Windows 11 ARM64, w
 
 ### Automated results
 
-**macOS: 60 passed, 0 failed. Windows 11 - Main: 60 passed, 0 failed.** Typecheck, production build and portable packaging passed. The same functional/security suite ran on both platforms; it includes encrypted case contents and originals, wrong credentials, restart locking, roles, stale saves, expired/revoked sessions, history integrity, restore, backup, sharing, hostile text and malformed imports.
+**macOS: 60 passed, 0 failed. Windows 11 ARM64: 60 passed, 0 failed.** Typecheck, production build and portable packaging passed. The same functional/security suite ran on both platforms; it includes encrypted case contents and originals, wrong credentials, restart locking, roles, stale saves, expired/revoked sessions, history integrity, restore, backup, sharing, hostile text and malformed imports.
 
 Additional boundary checks cover the full card/thread limits, deep hierarchies, large workspace requests, save races, exact 10 MiB attachment preservation, empty/oversized attachment rejection, date-only chronology, zone precedence and Windows-safe names. These are data/API checks, not a claim that a maximum-size board was rendered interactively.
 
 ### Remaining verification limits
 
-Linux execution, UNC/network-share startup, physical printing, instant OS-managed PWA icon refresh, a ten-real-minute idle wait, and maximum-size interactive rendering remain unverified. Advanced security had automated coverage on Windows and the earlier macOS UI checks above; this pass did not create new Windows credentials or repeat every Advanced UI workflow. Browser/computer-use restrictions prevented the maximum-size browser check and the last physical card-placement check. No alternate browser automation was used to bypass those restrictions.
+Linux execution, UNC/network-share startup, physical printing, instant OS-managed PWA icon refresh, a ten-real-minute idle wait, and maximum-size interactive rendering remain unverified. Advanced security had automated coverage on Windows and the earlier macOS UI checks above; this pass did not create new Windows credentials or repeat every Advanced UI workflow. The maximum-size browser check and final card-placement UI check were not completed in this pass.
 
-No test failures remain in the checked paths. This audit cannot establish that every possible bug is absent or provide independent security certification. Proof image: `output/qa/windows-html-timeline.png`.
+All completed checks passed. These results cover only the tested paths and do not provide independent security certification. Proof image: `output/qa/windows-html-timeline.png`.
